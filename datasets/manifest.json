@@ -1,0 +1,97 @@
+{
+  "format": "TC_GRAPH 1",
+  "generator_seed": 20261117,
+  "graph_count": 9,
+  "graphs": [
+    {
+      "file": "00_empty.graph",
+      "sha256": "7192cc5e19453833b09a28c92026b3635aca73c4a0806ae06ff80f07ff9572f8",
+      "vertices": 0,
+      "edges": 0,
+      "density": 0,
+      "seed": 20261117,
+      "family": "edge_case",
+      "case": "empty"
+    },
+    {
+      "file": "01_singleton.graph",
+      "sha256": "e8299416326a58844922f27b398d19236ff5f8127f882835d6762a452a680424",
+      "vertices": 1,
+      "edges": 0,
+      "density": 0,
+      "seed": 20261117,
+      "family": "edge_case",
+      "case": "singleton"
+    },
+    {
+      "file": "02_single_edge.graph",
+      "sha256": "e0460701fab9446b0428e32afaf1844e0e7d7022aee8e7ea5f7ad8a0516a65d4",
+      "vertices": 2,
+      "edges": 1,
+      "density": 1.0,
+      "seed": 20261117,
+      "family": "edge_case",
+      "case": "single_edge"
+    },
+    {
+      "file": "03_path_6.graph",
+      "sha256": "e91ed21b7cc2e39dca12b1ebe83a3a01054bfcc6f51860974a6165789ff428ba",
+      "vertices": 6,
+      "edges": 5,
+      "density": 0.3333333333333333,
+      "seed": 20261117,
+      "family": "constructed_path",
+      "case": "positive"
+    },
+    {
+      "file": "04_cycle_6.graph",
+      "sha256": "ba59bd67bbeb7a148b4ba5f5c9105d15d71874cdac2c9d82aedb21767355f093",
+      "vertices": 6,
+      "edges": 6,
+      "density": 0.4,
+      "seed": 20261117,
+      "family": "constructed_cycle",
+      "case": "positive"
+    },
+    {
+      "file": "05_odd_star_5.graph",
+      "sha256": "fa6e85e7a9001eb6cfc41cf0021242e61a177bdd5e17a093d1b9a3dd41e40f69",
+      "vertices": 5,
+      "edges": 4,
+      "density": 0.4,
+      "seed": 20261117,
+      "family": "odd_degree",
+      "case": "negative"
+    },
+    {
+      "file": "06_disconnected_triangles.graph",
+      "sha256": "bf9a62b01bda27ca0c27078d14b69d4b72fe5842ccd90b65733c04e813d8e11a",
+      "vertices": 6,
+      "edges": 6,
+      "density": 0.4,
+      "seed": 20261117,
+      "family": "disconnected",
+      "case": "negative"
+    },
+    {
+      "file": "07_k3_5.graph",
+      "sha256": "7795784d24f24b8d5dbf652ddb19b2e592dd546c9cc98172acffe19d8050d015",
+      "vertices": 8,
+      "edges": 15,
+      "density": 0.5357142857142857,
+      "seed": 20261117,
+      "family": "unbalanced_bipartite",
+      "case": "hard_negative"
+    },
+    {
+      "file": "08_gnp_8.graph",
+      "sha256": "dac8e44d6f15e882fe2d2c91e1ba17200a405df0d566cfa9ca4b2e307f94f45f",
+      "vertices": 8,
+      "edges": 8,
+      "density": 0.2857142857142857,
+      "seed": 20261125,
+      "family": "gnp",
+      "case": "random"
+    }
+  ]
+}

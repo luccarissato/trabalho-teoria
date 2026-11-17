@@ -1,0 +1,19 @@
+.env
+*.md
+
+!README.md
+
+# Artefatos locais de compilação e teste
+c/bin/
+__pycache__/
+*.py[cod]
+.venv/
+tmp/
+*.o
+*.obj
+*.exe
+*.pdb
+
+# Validadores temporários solicitados durante o desenvolvimento
+testar_etapa*.ps1
+resultados_testes*.txt

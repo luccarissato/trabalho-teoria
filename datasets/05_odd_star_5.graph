@@ -1,0 +1,11 @@
+TC_GRAPH 1
+V 5
+E 4
+SEED 20261117
+FAMILY odd_degree
+CASE negative
+EDGES
+0 1
+0 2
+0 3
+0 4

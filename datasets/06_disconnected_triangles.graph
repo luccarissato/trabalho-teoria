@@ -1,0 +1,13 @@
+TC_GRAPH 1
+V 6
+E 6
+SEED 20261117
+FAMILY disconnected
+CASE negative
+EDGES
+0 1
+0 2
+1 2
+3 4
+3 5
+4 5

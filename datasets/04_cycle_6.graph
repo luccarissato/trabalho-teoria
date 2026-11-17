@@ -1,0 +1,13 @@
+TC_GRAPH 1
+V 6
+E 6
+SEED 20261117
+FAMILY constructed_cycle
+CASE positive
+EDGES
+0 1
+0 5
+1 2
+2 3
+3 4
+4 5

@@ -1,0 +1,8 @@
+TC_GRAPH 1
+V 2
+E 1
+SEED 20261117
+FAMILY edge_case
+CASE single_edge
+EDGES
+0 1
