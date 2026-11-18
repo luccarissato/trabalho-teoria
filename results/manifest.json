@@ -1,0 +1,27 @@
+{
+    "schema_version":  1,
+    "collected_at":  "2026-11-18T09:10:50.6880266-03:00",
+    "commit":  "4710602f03c6e8a55700d8c43289fa66b4272a7d",
+    "tracked_worktree_dirty":  true,
+    "cpu":  "Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz",
+    "logical_processors":  8,
+    "ram_bytes":  17033236480,
+    "operating_system":  "Microsoft Windows NT 10.0.26200.0",
+    "operating_system_version":  "10.0.26200.0",
+    "powershell":  "5.1.26100.9711",
+    "gcc":  "gcc.exe (Rev7, Built by MSYS2 project) 16.2.0",
+    "c_standard":  "C17",
+    "compiler_flags":  "-std=c17 -O2 -Wall -Wextra -Wpedantic",
+    "python":  "Python 3.14.10",
+    "python_executable":  "C:\\Users\\Lucz\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe",
+    "python_jit":  "disabled",
+    "power_mode":  "GUID do Esquema de Energia: 381b4222-f694-41f0-9685-ff5bb260df2e  (Equilibrado)",
+    "timers":  {
+                   "c_windows":  "QueryPerformanceCounter",
+                   "c_linux":  "clock_gettime(CLOCK_MONOTONIC)",
+                   "python":  "time.perf_counter_ns"
+               },
+    "timeout_seconds":  60,
+    "timing_repetitions":  20,
+    "memory_repetitions":  15
+}

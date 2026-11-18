@@ -1,3 +1,7 @@
+#ifndef _WIN32
+#define _POSIX_C_SOURCE 200809L
+#endif
+
 #include <ctype.h>
 #include <errno.h>
 #include <stdbool.h>
@@ -6,6 +10,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#include <time.h>
+#endif
 
 typedef struct {
     int to;
@@ -39,6 +50,44 @@ typedef struct {
     unsigned long long edge_steps;
     unsigned long long states_explored;
 } Result;
+
+static unsigned long long monotonic_nanoseconds(void) {
+#ifdef _WIN32
+    LARGE_INTEGER frequency;
+    LARGE_INTEGER counter;
+    if (!QueryPerformanceFrequency(&frequency) || !QueryPerformanceCounter(&counter)) {
+        fprintf(stderr, "erro: QueryPerformanceCounter indisponivel\n");
+        exit(2);
+    }
+    unsigned long long ticks = (unsigned long long)counter.QuadPart;
+    unsigned long long ticks_per_second = (unsigned long long)frequency.QuadPart;
+    return (ticks / ticks_per_second) * 1000000000ULL
+        + ((ticks % ticks_per_second) * 1000000000ULL) / ticks_per_second;
+#else
+    struct timespec timestamp;
+    if (clock_gettime(CLOCK_MONOTONIC, &timestamp) != 0) {
+        fprintf(stderr, "erro: clock_gettime indisponivel\n");
+        exit(2);
+    }
+    return (unsigned long long)timestamp.tv_sec * 1000000000ULL
+        + (unsigned long long)timestamp.tv_nsec;
+#endif
+}
+
+static void hold_milliseconds(unsigned long long milliseconds) {
+#ifdef _WIN32
+    while (milliseconds > 0) {
+        DWORD chunk = milliseconds > 0xffffffffULL ? 0xffffffffUL : (DWORD)milliseconds;
+        Sleep(chunk);
+        milliseconds -= chunk;
+    }
+#else
+    struct timespec duration;
+    duration.tv_sec = (time_t)(milliseconds / 1000ULL);
+    duration.tv_nsec = (long)((milliseconds % 1000ULL) * 1000000ULL);
+    while (nanosleep(&duration, &duration) != 0 && errno == EINTR) {}
+#endif
+}
 
 static void *checked_calloc(size_t count, size_t size) {
     void *memory = calloc(count == 0 ? 1 : count, size);
@@ -430,6 +479,12 @@ static Result find_hamiltonian_path(const Graph *graph) {
     return result;
 }
 
+static Result run_algorithm(const Graph *graph, const char *problem) {
+    return strcmp(problem, "eulerian") == 0
+        ? find_eulerian_path(graph)
+        : find_hamiltonian_path(graph);
+}
+
 static ptrdiff_t find_edge(const Graph *graph, int u, int v) {
     if (u > v) {
         int temporary = u;
@@ -499,7 +554,18 @@ static void print_json_string(const char *value) {
     putchar('"');
 }
 
-static void print_result(const Graph *graph, const char *problem, const Result *result, bool valid) {
+static void print_result(
+    const Graph *graph,
+    const char *problem,
+    const Result *result,
+    bool valid,
+    bool baseline,
+    unsigned long long elapsed_nanoseconds,
+    unsigned long long elapsed_total_nanoseconds,
+    unsigned long long warmups,
+    unsigned long long batch_size,
+    unsigned long long hold_ms
+) {
     printf("{\"problem\":");
     print_json_string(problem);
     printf(",\"exists\":%s,\"path\":[", result->exists ? "true" : "false");
@@ -508,12 +574,28 @@ static void print_result(const Graph *graph, const char *problem, const Result *
         printf("%d", result->path[index]);
     }
     printf(
-        "],\"valid\":%s,\"edge_steps\":%llu,\"states_explored\":%llu,"
-        "\"elapsed_ns\":null,\"vertices\":%zu,\"edges\":%zu,\"seed\":%llu,"
-        "\"family\":",
+        "],\"valid\":%s,\"baseline\":%s,\"edge_steps\":%llu,"
+        "\"states_explored\":%llu,",
         valid ? "true" : "false",
+        baseline ? "true" : "false",
         result->edge_steps,
-        result->states_explored,
+        result->states_explored
+    );
+    if (baseline) {
+        printf("\"elapsed_ns\":null,\"elapsed_ns_total\":null,");
+    } else {
+        printf(
+            "\"elapsed_ns\":%llu,\"elapsed_ns_total\":%llu,",
+            elapsed_nanoseconds,
+            elapsed_total_nanoseconds
+        );
+    }
+    printf(
+        "\"warmups\":%llu,\"batch_size\":%llu,\"hold_ms\":%llu,\"vertices\":%zu,"
+        "\"edges\":%zu,\"seed\":%llu,\"family\":",
+        warmups,
+        batch_size,
+        hold_ms,
         graph->vertex_count,
         graph->edge_count,
         graph->seed
@@ -527,13 +609,39 @@ static void print_result(const Graph *graph, const char *problem, const Result *
 int main(int argc, char **argv) {
     const char *problem = NULL;
     const char *input_path = NULL;
-    for (int index = 1; index < argc; index += 2) {
+    unsigned long long warmups = 0;
+    unsigned long long batch_size = 1;
+    unsigned long long hold_ms = 0;
+    bool baseline = false;
+    for (int index = 1; index < argc; ++index) {
+        if (strcmp(argv[index], "--baseline") == 0) {
+            baseline = true;
+            continue;
+        }
         if (index + 1 >= argc) {
             fprintf(stderr, "erro: argumento sem valor\n");
             return 2;
         }
-        if (strcmp(argv[index], "--problem") == 0) problem = argv[index + 1];
-        else if (strcmp(argv[index], "--input") == 0) input_path = argv[index + 1];
+        if (strcmp(argv[index], "--problem") == 0) problem = argv[++index];
+        else if (strcmp(argv[index], "--input") == 0) input_path = argv[++index];
+        else if (strcmp(argv[index], "--warmups") == 0) {
+            if (!parse_unsigned(argv[++index], &warmups)) {
+                fprintf(stderr, "erro: warmups invalido\n");
+                return 2;
+            }
+        }
+        else if (strcmp(argv[index], "--batch-size") == 0) {
+            if (!parse_unsigned(argv[++index], &batch_size) || batch_size == 0) {
+                fprintf(stderr, "erro: batch-size deve ser positivo\n");
+                return 2;
+            }
+        }
+        else if (strcmp(argv[index], "--hold-ms") == 0) {
+            if (!parse_unsigned(argv[++index], &hold_ms)) {
+                fprintf(stderr, "erro: hold-ms invalido\n");
+                return 2;
+            }
+        }
         else {
             fprintf(stderr, "erro: argumento desconhecido: %s\n", argv[index]);
             return 2;
@@ -543,20 +651,52 @@ int main(int argc, char **argv) {
         || (strcmp(problem, "eulerian") != 0 && strcmp(problem, "hamiltonian") != 0)) {
         fprintf(
             stderr,
-            "erro: uso: graph_solver --problem eulerian|hamiltonian --input arquivo.graph\n"
+            "erro: uso: graph_solver --problem eulerian|hamiltonian --input arquivo.graph "
+            "[--warmups N] [--batch-size N] [--hold-ms N] [--baseline]\n"
         );
         return 2;
     }
 
     Graph graph;
     if (!load_graph(input_path, &graph)) return 2;
-    Result result = strcmp(problem, "eulerian") == 0
-        ? find_eulerian_path(&graph)
-        : find_hamiltonian_path(&graph);
-    bool valid = strcmp(problem, "eulerian") == 0
-        ? validate_eulerian_path(&graph, &result)
-        : validate_hamiltonian_path(&graph, &result);
-    print_result(&graph, problem, &result, valid);
+    Result result = {0};
+    unsigned long long elapsed_total_nanoseconds = 0;
+    unsigned long long elapsed_nanoseconds = 0;
+    bool valid = true;
+    if (!baseline) {
+        for (unsigned long long repetition = 0; repetition < warmups; ++repetition) {
+            Result preliminary = run_algorithm(&graph, problem);
+            free(preliminary.path);
+        }
+        unsigned long long start = monotonic_nanoseconds();
+        for (unsigned long long repetition = 0; repetition < batch_size; ++repetition) {
+            Result current = run_algorithm(&graph, problem);
+            if (repetition + 1 == batch_size) {
+                result = current;
+            } else {
+                free(current.path);
+            }
+        }
+        unsigned long long end = monotonic_nanoseconds();
+        elapsed_total_nanoseconds = end - start;
+        elapsed_nanoseconds = elapsed_total_nanoseconds / batch_size;
+        valid = strcmp(problem, "eulerian") == 0
+            ? validate_eulerian_path(&graph, &result)
+            : validate_hamiltonian_path(&graph, &result);
+    }
+    hold_milliseconds(hold_ms);
+    print_result(
+        &graph,
+        problem,
+        &result,
+        valid,
+        baseline,
+        elapsed_nanoseconds,
+        elapsed_total_nanoseconds,
+        warmups,
+        batch_size,
+        hold_ms
+    );
     free(result.path);
     free_graph(&graph);
     return valid ? 0 : 3;

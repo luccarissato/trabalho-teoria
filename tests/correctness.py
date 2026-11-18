@@ -53,7 +53,13 @@ def run(command: list[str], expected_status: int = 0) -> str:
     return completed.stdout.strip()
 
 
-def run_solver(kind: str, c_path: str, problem: str, input_path: Path) -> dict:
+def run_solver(
+    kind: str,
+    c_path: str,
+    problem: str,
+    input_path: Path,
+    extra_arguments: tuple[str, ...] = (),
+) -> dict:
     command = (
         [c_path, "--problem", problem, "--input", str(input_path)]
         if kind == "c"
@@ -66,6 +72,7 @@ def run_solver(kind: str, c_path: str, problem: str, input_path: Path) -> dict:
             str(input_path),
         ]
     )
+    command.extend(extra_arguments)
     try:
         return json.loads(run(command))
     except json.JSONDecodeError as error:
@@ -169,6 +176,15 @@ def main() -> int:
                 check(c_result["exists"] == py_result["exists"], f"linguagens discordam: {entry['file']}/{problem}")
                 check(c_result["path"] == py_result["path"], f"caminhos não determinísticos: {entry['file']}/{problem}")
                 check(c_result["valid"] is True and py_result["valid"] is True, f"autovalidação falhou: {entry['file']}/{problem}")
+                for language, output in (("C", c_result), ("Python", py_result)):
+                    check(output["baseline"] is False, f"{language} marcou execução normal como baseline")
+                    check(isinstance(output["elapsed_ns"], int) and output["elapsed_ns"] >= 0, f"tempo inválido em {language}")
+                    check(
+                        isinstance(output["elapsed_ns_total"], int)
+                        and output["elapsed_ns_total"] >= output["elapsed_ns"],
+                        f"tempo total inválido em {language}",
+                    )
+                    check(output["warmups"] == 0 and output["batch_size"] == 1, f"metadados de medição inválidos em {language}")
                 c_view = SimpleNamespace(exists=c_result["exists"], path=tuple(c_result["path"]))
                 py_view = SimpleNamespace(exists=py_result["exists"], path=tuple(py_result["path"]))
                 validations = (
@@ -178,6 +194,19 @@ def main() -> int:
                 )
                 check(all(item["valid"] for item in validations), f"validador independente rejeitou: {entry['file']}/{problem}")
                 check(c_result["states_explored"] == py_result["states_explored"], f"contadores divergem: {entry['file']}/{problem}")
+
+        baseline_input = datasets / manifest["graphs"][0]["file"]
+        for language in ("c", "python"):
+            baseline = run_solver(
+                language,
+                args.c,
+                "eulerian",
+                baseline_input,
+                ("--baseline",),
+            )
+            check(baseline["baseline"] is True, f"baseline não identificado em {language}")
+            check(baseline["valid"] is True, f"baseline inválido em {language}")
+            check(baseline["elapsed_ns"] is None, f"baseline mediu algoritmo em {language}")
 
         invalid = temporary / "invalid.graph"
         invalid.write_text(
