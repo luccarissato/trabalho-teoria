@@ -9,21 +9,25 @@ Os dois algoritmos são implementados em **C17** e **Python**, totalizando quatr
 
 ## Estado atual
 
-A Etapa 1 e a infraestrutura da Etapa 2 estão concluídas:
+As Etapas 1, 2 e 3 estão concluídas:
 
 - formato comum de grafo e saída JSON;
 - quatro implementações;
 - gerador com seed fixa e manifesto SHA-256;
 - validadores e oráculos independentes;
 - testes cruzados entre C e Python;
-- casos positivos, negativos, aleatórios e casos-limite.
+- casos positivos, negativos, aleatórios e casos-limite;
 - cronômetros envolvendo somente a chamada do algoritmo;
 - três rodadas preliminares e lotes automáticos para operações rápidas;
 - 20 repetições de tempo com timeout externo de 60 segundos;
 - medição de pico de memória por processo novo, com baseline e 15 repetições;
-- manifesto reproduzível do ambiente de execução.
+- manifesto reproduzível do ambiente de execução;
+- 29 datasets experimentais congelados por SHA-256;
+- 20 repetições válidas em cada ponto final de tempo;
+- campanha de memória com 15 processos por modo e ponto;
+- tabelas estatísticas e oito gráficos SVG regeneráveis.
 
-A campanha final, a análise estatística e os gráficos pertencem à Etapa 3. Os dados obtidos antes de os tamanhos finais serem congelados devem ser tratados como validação da infraestrutura, não como resultados finais.
+O piloto registrou `V=14` como o maior caso bipartido difícil concluído em até 60 segundos nas duas linguagens e `V=16` como o primeiro ponto censurado. A reflexão formal sobre P e NP e o fechamento da entrega pertencem à Etapa 4.
 
 ## Pré-requisitos
 
@@ -83,6 +87,29 @@ powershell -ExecutionPolicy Bypass -File .\tools\run-benchmarks.ps1 -Datasets da
 powershell -ExecutionPolicy Bypass -File .\tools\measure-memory.ps1 -Datasets datasets\04_cycle_6.graph
 ```
 
+## Reprodução da campanha final
+
+Para regenerar os datasets, recompilar, executar piloto, tempos, memória, tabelas e gráficos:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\run-experiments.ps1
+```
+
+Na máquina registrada em `results/manifest.json`, a campanha completa leva aproximadamente 15 minutos. Os artefatos ficam organizados assim:
+
+```text
+datasets/experimental-manifest.json  hashes e tamanhos congelados
+results/raw/                         todas as observações individuais
+results/summary/timing.csv           média, mediana, desvio, mínimo e máximo
+results/summary/memory.csv           pico, baseline e incremento aproximado
+results/summary/viability.csv        maior V concluído e primeiro timeout
+results/summary/summary.txt          tabelas compactas para conferência
+results/charts/                      oito gráficos SVG
+results/analysis-manifest.json       hashes das entradas e saídas da análise
+```
+
+Nenhum outlier válido é removido. Somente linhas concluídas, válidas e não censuradas entram nas estatísticas; timeouts permanecem nos CSVs brutos.
+
 ## Formato dos grafos
 
 ```text
@@ -115,6 +142,8 @@ tools/generate.py         Gerador determinístico
 tools/validate.py         Validadores independentes
 tools/run-benchmarks.ps1  Coleta reprodutível de tempo
 tools/measure-memory.ps1  Coleta de pico de memória no Windows
+tools/run-experiments.ps1 Campanha experimental completa
+tools/analyze.py          Estatísticas, tabelas e gráficos SVG
 datasets/                 Grafos e manifesto com hashes
 results/                  CSVs e manifesto experimental
 relatorio.md              Relatório na ordem exigida pela disciplina

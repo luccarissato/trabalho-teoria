@@ -1,0 +1,14 @@
+TC_GRAPH 1
+V 8
+E 7
+SEED 20261125
+FAMILY constructed_path
+CASE favorable_positive
+EDGES
+0 1
+1 2
+2 3
+3 4
+4 5
+5 6
+6 7

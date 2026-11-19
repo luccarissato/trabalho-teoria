@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="480.0" y="34" text-anchor="middle" font-family="Segoe UI,Arial" font-size="22" font-weight="600" fill="#111827">Incremento aproximado de memória</text>
+<line x1="105.00" y1="70" x2="105.00" y2="515" stroke="#e5e7eb"/>
+<text x="105.00" y="539" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">4.9</text>
+<line x1="105" y1="515.00" x2="925" y2="515.00" stroke="#e5e7eb"/>
+<text x="93" y="519.00" text-anchor="end" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">0</text>
+<line x1="269.00" y1="70" x2="269.00" y2="515" stroke="#e5e7eb"/>
+<text x="269.00" y="539" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">31</text>
+<line x1="105" y1="426.00" x2="925" y2="426.00" stroke="#e5e7eb"/>
+<text x="93" y="430.00" text-anchor="end" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">79 299</text>
+<line x1="433.00" y1="70" x2="433.00" y2="515" stroke="#e5e7eb"/>
+<text x="433.00" y="539" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">200</text>
+<line x1="105" y1="337.00" x2="925" y2="337.00" stroke="#e5e7eb"/>
+<text x="93" y="341.00" text-anchor="end" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">158 597</text>
+<line x1="597.00" y1="70" x2="597.00" y2="515" stroke="#e5e7eb"/>
+<text x="597.00" y="539" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">1 281</text>
+<line x1="105" y1="248.00" x2="925" y2="248.00" stroke="#e5e7eb"/>
+<text x="93" y="252.00" text-anchor="end" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">237 896</text>
+<line x1="761.00" y1="70" x2="761.00" y2="515" stroke="#e5e7eb"/>
+<text x="761.00" y="539" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">8 211</text>
+<line x1="105" y1="159.00" x2="925" y2="159.00" stroke="#e5e7eb"/>
+<text x="93" y="163.00" text-anchor="end" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">317 194</text>
+<line x1="925.00" y1="70" x2="925.00" y2="515" stroke="#e5e7eb"/>
+<text x="925.00" y="539" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">52 635</text>
+<line x1="105" y1="70.00" x2="925" y2="70.00" stroke="#e5e7eb"/>
+<text x="93" y="74.00" text-anchor="end" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">396 493</text>
+<line x1="105" y1="515" x2="925" y2="515" stroke="#111827" stroke-width="1.5"/>
+<line x1="105" y1="70" x2="105" y2="515" stroke="#111827" stroke-width="1.5"/>
+<text x="515.0" y="576" text-anchor="middle" font-family="Segoe UI,Arial" font-size="15" fill="#111827">V</text>
+<text x="25" y="292.5" text-anchor="middle" transform="rotate(-90 25 292.5)" font-family="Segoe UI,Arial" font-size="15" fill="#111827">Bytes</text>
+<polyline points="575.14,501.21 636.33,478.22 697.51,501.21 758.70,446.04 819.89,335.71 881.07,110.45" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+<circle cx="575.14" cy="501.21" r="4" fill="#2563eb"><title>c / eulerian / constructed_cycle_scale: x=1000, y=12288</title></circle>
+<circle cx="636.33" cy="478.22" r="4" fill="#2563eb"><title>c / eulerian / constructed_cycle_scale: x=2000, y=32768</title></circle>
+<circle cx="697.51" cy="501.21" r="4" fill="#2563eb"><title>c / eulerian / constructed_cycle_scale: x=4000, y=12288</title></circle>
+<circle cx="758.70" cy="446.04" r="4" fill="#2563eb"><title>c / eulerian / constructed_cycle_scale: x=8000, y=61440</title></circle>
+<circle cx="819.89" cy="335.71" r="4" fill="#2563eb"><title>c / eulerian / constructed_cycle_scale: x=16000, y=159744</title></circle>
+<circle cx="881.07" cy="110.45" r="4" fill="#2563eb"><title>c / eulerian / constructed_cycle_scale: x=32000, y=360448</title></circle>
+<line x1="117" y1="90" x2="141" y2="90" stroke="#2563eb" stroke-width="3"/>
+<text x="148" y="94" font-family="Segoe UI,Arial" font-size="12" fill="#111827">c / eulerian / constructed_cycle_scale</text>
+<polyline points="148.93,482.82 168.63,505.81 191.79,496.61 210.11,501.21 229.81,496.61 249.51,515.00" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+<circle cx="148.93" cy="482.82" r="4" fill="#dc2626"><title>c / eulerian / constructed_path: x=8, y=28672</title></circle>
+<circle cx="168.63" cy="505.81" r="4" fill="#dc2626"><title>c / eulerian / constructed_path: x=10, y=8192</title></circle>
+<circle cx="191.79" cy="496.61" r="4" fill="#dc2626"><title>c / eulerian / constructed_path: x=13, y=16384</title></circle>
+<circle cx="210.11" cy="501.21" r="4" fill="#dc2626"><title>c / eulerian / constructed_path: x=16, y=12288</title></circle>
+<circle cx="229.81" cy="496.61" r="4" fill="#dc2626"><title>c / eulerian / constructed_path: x=20, y=16384</title></circle>
+<circle cx="249.51" cy="515.00" r="4" fill="#dc2626"><title>c / eulerian / constructed_path: x=25, y=0</title></circle>
+<line x1="392" y1="90" x2="416" y2="90" stroke="#dc2626" stroke-width="3"/>
+<text x="423" y="94" font-family="Segoe UI,Arial" font-size="12" fill="#111827">c / eulerian / constructed_path</text>
+<polyline points="148.93,469.03 168.63,492.01 191.79,478.22 210.11,505.81 229.81,501.21 249.51,515.00" fill="none" stroke="#059669" stroke-width="2.5"/>
+<circle cx="148.93" cy="469.03" r="4" fill="#059669"><title>c / hamiltonian / constructed_path: x=8, y=40960</title></circle>
+<circle cx="168.63" cy="492.01" r="4" fill="#059669"><title>c / hamiltonian / constructed_path: x=10, y=20480</title></circle>
+<circle cx="191.79" cy="478.22" r="4" fill="#059669"><title>c / hamiltonian / constructed_path: x=13, y=32768</title></circle>
+<circle cx="210.11" cy="505.81" r="4" fill="#059669"><title>c / hamiltonian / constructed_path: x=16, y=8192</title></circle>
+<circle cx="229.81" cy="501.21" r="4" fill="#059669"><title>c / hamiltonian / constructed_path: x=20, y=12288</title></circle>
+<circle cx="249.51" cy="515.00" r="4" fill="#059669"><title>c / hamiltonian / constructed_path: x=25, y=0</title></circle>
+<line x1="667" y1="90" x2="691" y2="90" stroke="#059669" stroke-width="3"/>
+<text x="698" y="94" font-family="Segoe UI,Arial" font-size="12" fill="#111827">c / hamiltonian / constructed_path</text>
+<polyline points="575.14,409.27 636.33,363.30 697.51,358.70 758.70,515.00 819.89,441.45 881.07,501.21" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
+<circle cx="575.14" cy="409.27" r="4" fill="#7c3aed"><title>python / eulerian / constructed_cycle_scale: x=1000, y=94208</title></circle>
+<circle cx="636.33" cy="363.30" r="4" fill="#7c3aed"><title>python / eulerian / constructed_cycle_scale: x=2000, y=135168</title></circle>
+<circle cx="697.51" cy="358.70" r="4" fill="#7c3aed"><title>python / eulerian / constructed_cycle_scale: x=4000, y=139264</title></circle>
+<circle cx="758.70" cy="515.00" r="4" fill="#7c3aed"><title>python / eulerian / constructed_cycle_scale: x=8000, y=0</title></circle>
+<circle cx="819.89" cy="441.45" r="4" fill="#7c3aed"><title>python / eulerian / constructed_cycle_scale: x=16000, y=65536</title></circle>
+<circle cx="881.07" cy="501.21" r="4" fill="#7c3aed"><title>python / eulerian / constructed_cycle_scale: x=32000, y=12288</title></circle>
+<line x1="117" y1="112" x2="141" y2="112" stroke="#7c3aed" stroke-width="3"/>
+<text x="148" y="116" font-family="Segoe UI,Arial" font-size="12" fill="#111827">python / eulerian / constructed_cycle_scale</text>
+<polyline points="148.93,510.40 168.63,469.03 191.79,423.06 210.11,464.43 229.81,515.00 249.51,455.24" fill="none" stroke="#ea580c" stroke-width="2.5"/>
+<circle cx="148.93" cy="510.40" r="4" fill="#ea580c"><title>python / eulerian / constructed_path: x=8, y=4096</title></circle>
+<circle cx="168.63" cy="469.03" r="4" fill="#ea580c"><title>python / eulerian / constructed_path: x=10, y=40960</title></circle>
+<circle cx="191.79" cy="423.06" r="4" fill="#ea580c"><title>python / eulerian / constructed_path: x=13, y=81920</title></circle>
+<circle cx="210.11" cy="464.43" r="4" fill="#ea580c"><title>python / eulerian / constructed_path: x=16, y=45056</title></circle>
+<circle cx="229.81" cy="515.00" r="4" fill="#ea580c"><title>python / eulerian / constructed_path: x=20, y=0</title></circle>
+<circle cx="249.51" cy="455.24" r="4" fill="#ea580c"><title>python / eulerian / constructed_path: x=25, y=53248</title></circle>
+<line x1="392" y1="112" x2="416" y2="112" stroke="#ea580c" stroke-width="3"/>
+<text x="423" y="116" font-family="Segoe UI,Arial" font-size="12" fill="#111827">python / eulerian / constructed_path</text>
+<polyline points="148.93,515.00 168.63,427.65 191.79,464.43 210.11,473.63 229.81,515.00 249.51,515.00" fill="none" stroke="#0891b2" stroke-width="2.5"/>
+<circle cx="148.93" cy="515.00" r="4" fill="#0891b2"><title>python / hamiltonian / constructed_path: x=8, y=0</title></circle>
+<circle cx="168.63" cy="427.65" r="4" fill="#0891b2"><title>python / hamiltonian / constructed_path: x=10, y=77824</title></circle>
+<circle cx="191.79" cy="464.43" r="4" fill="#0891b2"><title>python / hamiltonian / constructed_path: x=13, y=45056</title></circle>
+<circle cx="210.11" cy="473.63" r="4" fill="#0891b2"><title>python / hamiltonian / constructed_path: x=16, y=36864</title></circle>
+<circle cx="229.81" cy="515.00" r="4" fill="#0891b2"><title>python / hamiltonian / constructed_path: x=20, y=0</title></circle>
+<circle cx="249.51" cy="515.00" r="4" fill="#0891b2"><title>python / hamiltonian / constructed_path: x=25, y=0</title></circle>
+<line x1="667" y1="112" x2="691" y2="112" stroke="#0891b2" stroke-width="3"/>
+<text x="698" y="116" font-family="Segoe UI,Arial" font-size="12" fill="#111827">python / hamiltonian / constructed_path</text>
+</svg>

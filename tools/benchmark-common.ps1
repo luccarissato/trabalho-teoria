@@ -39,7 +39,7 @@ function Invoke-DirectProcess {
 
     $process = $null
     try {
-        for ($attempt = 1; $attempt -le 20; $attempt++) {
+        for ($attempt = 1; $attempt -le 60; $attempt++) {
             $candidate = New-Object System.Diagnostics.Process
             $candidate.StartInfo = $startInfo
             try {
@@ -52,10 +52,12 @@ function Invoke-DirectProcess {
             catch {
                 $startError = $_
                 $candidate.Dispose()
-                if ($attempt -eq 20) { throw $startError }
+                if ($attempt -eq 60) { throw $startError }
                 Start-Sleep -Milliseconds 500
             }
         }
+        $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+        $stderrTask = $process.StandardError.ReadToEndAsync()
         $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
         $peakWorkingSet = 0L
         $peakPagedMemory = 0L
@@ -75,8 +77,8 @@ function Invoke-DirectProcess {
             $process.WaitForExit()
         }
         $process.Refresh()
-        $stdout = $process.StandardOutput.ReadToEnd()
-        $stderr = $process.StandardError.ReadToEnd()
+        $stdout = $stdoutTask.GetAwaiter().GetResult()
+        $stderr = $stderrTask.GetAwaiter().GetResult()
         $exitCode = if ($completed) { $process.ExitCode } else { $null }
         return [pscustomobject]@{
             Status = if ($completed) { 'completed' } else { 'timeout' }

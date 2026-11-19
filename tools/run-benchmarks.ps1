@@ -54,6 +54,23 @@ function Get-RelativeDatasetPath {
     return [System.Uri]::UnescapeDataString($rootUri.MakeRelativeUri($pathUri).ToString())
 }
 
+function Get-GraphMetadata {
+    param([string]$Path)
+    $metadata = @{}
+    foreach ($line in Get-Content -LiteralPath $Path -TotalCount 7 -Encoding UTF8) {
+        if ($line -match '^(V|E|SEED|FAMILY|CASE)\s+(.+)$') {
+            $metadata[$Matches[1]] = $Matches[2]
+        }
+    }
+    return [pscustomobject]@{
+        vertices = [long]$metadata['V']
+        edges = [long]$metadata['E']
+        seed = [long]$metadata['SEED']
+        family = [string]$metadata['FAMILY']
+        case_name = [string]$metadata['CASE']
+    }
+}
+
 function Invoke-Solver {
     param(
         [string]$Language,
@@ -77,6 +94,7 @@ function Invoke-Solver {
 }
 
 foreach ($dataset in $datasetFiles) {
+    $datasetMetadata = Get-GraphMetadata $dataset
     foreach ($problem in $Problems) {
         foreach ($language in @('c', 'python')) {
             $selectedBatchSize = $BatchSize
@@ -113,20 +131,20 @@ foreach ($dataset in $datasetFiles) {
                     $status = 'failed'
                 }
 
-                $vertices = if ($data) { [long]$data.vertices } else { $null }
-                $edges = if ($data) { [long]$data.edges } else { $null }
-                $density = if ($data -and $vertices -gt 1) {
+                $vertices = if ($data) { [long]$data.vertices } else { $datasetMetadata.vertices }
+                $edges = if ($data) { [long]$data.edges } else { $datasetMetadata.edges }
+                $density = if ($vertices -gt 1) {
                     ((2.0 * $edges) / ($vertices * ($vertices - 1))).ToString('R', $invariant)
-                } elseif ($data) { '0' } else { $null }
+                } else { '0' }
                 $rows.Add([pscustomobject][ordered]@{
                     timestamp = [DateTimeOffset]::Now.ToString('o')
                     commit = $commit
                     language = $language
                     problem = $problem
                     dataset = Get-RelativeDatasetPath $dataset
-                    family = if ($data) { $data.family } else { $null }
-                    case = if ($data) { $data.case } else { $null }
-                    seed = if ($data) { $data.seed } else { $null }
+                    family = if ($data) { $data.family } else { $datasetMetadata.family }
+                    case = if ($data) { $data.case } else { $datasetMetadata.case_name }
+                    seed = if ($data) { $data.seed } else { $datasetMetadata.seed }
                     V = $vertices
                     E = $edges
                     density = $density

@@ -1,0 +1,74 @@
+{
+  "format": "TC_GRAPH 1",
+  "suite": "eulerian-scale",
+  "generator_seed": 20261117,
+  "graph_count": 6,
+  "graphs": [
+    {
+      "file": "eulerian-scale/cycle_v01000.graph",
+      "sha256": "20b39a537fa014d7df93341ec08c08f0de514adbb11ca8745cc18c94cee26a8a",
+      "vertices": 1000,
+      "edges": 1000,
+      "density": 0.002002002002002002,
+      "seed": 20266117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v02000.graph",
+      "sha256": "18c2cba8404a75793d5ed26a103b4d1472b17dafd825a6135030ba3037867fb1",
+      "vertices": 2000,
+      "edges": 2000,
+      "density": 0.0010005002501250625,
+      "seed": 20267117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v04000.graph",
+      "sha256": "52a65c50e95dadf8de8c6fd56cadd6c4b382a917f6fe360804478157797c4642",
+      "vertices": 4000,
+      "edges": 4000,
+      "density": 0.0005001250312578145,
+      "seed": 20269117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v08000.graph",
+      "sha256": "dd954cd07e7b9474a4126a03f360d4c2d3550c8bca2e51da65fbb544bfd97ff7",
+      "vertices": 8000,
+      "edges": 8000,
+      "density": 0.00025003125390673836,
+      "seed": 20273117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v16000.graph",
+      "sha256": "b905158d0950a6d7fce198c9165d7e1fe8a2b2c2ca7840382665df01dbd6889f",
+      "vertices": 16000,
+      "edges": 16000,
+      "density": 0.00012500781298831177,
+      "seed": 20281117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v32000.graph",
+      "sha256": "e069bfa3705531a8819893c99eff20326f75f9eafc5c516e882034ae22865a33",
+      "vertices": 32000,
+      "edges": 32000,
+      "density": 6.250195318603706e-05,
+      "seed": 20297117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    }
+  ]
+}

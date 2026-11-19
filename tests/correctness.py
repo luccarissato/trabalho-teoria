@@ -27,7 +27,7 @@ def parse_arguments() -> argparse.Namespace:
 
 def run(command: list[str], expected_status: int = 0) -> str:
     completed = None
-    for attempt in range(20):
+    for attempt in range(60):
         try:
             completed = subprocess.run(
                 command,
@@ -41,7 +41,7 @@ def run(command: list[str], expected_status: int = 0) -> str:
             )
             break
         except OSError:
-            if attempt == 19:
+            if attempt == 59:
                 raise
             time.sleep(0.5)
     assert completed is not None

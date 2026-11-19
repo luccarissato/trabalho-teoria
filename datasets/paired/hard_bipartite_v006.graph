@@ -1,0 +1,15 @@
+TC_GRAPH 1
+V 6
+E 8
+SEED 20263123
+FAMILY unbalanced_bipartite
+CASE hard_negative
+EDGES
+0 2
+0 3
+0 4
+0 5
+1 2
+1 3
+1 4
+1 5

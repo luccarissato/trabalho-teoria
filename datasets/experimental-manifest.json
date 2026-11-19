@@ -1,0 +1,360 @@
+{
+  "format": "TC_GRAPH 1",
+  "suite_version": 1,
+  "generator": "tools/generate_experiments.py",
+  "generator_sha256": "aa1539af0c1c64458e28e145be81dc54aeed8f365e8d2c27928df3ce13c179dc",
+  "generator_seed": 20261117,
+  "paired_sizes": [
+    8,
+    10,
+    13,
+    16,
+    20,
+    25
+  ],
+  "hard_sizes": [
+    4,
+    5,
+    6,
+    8,
+    10,
+    12
+  ],
+  "pilot_sizes": [
+    8,
+    10,
+    12,
+    14,
+    16
+  ],
+  "eulerian_scale_sizes": [
+    1000,
+    2000,
+    4000,
+    8000,
+    16000,
+    32000
+  ],
+  "graph_count": 29,
+  "graphs": [
+    {
+      "file": "paired/path_v008.graph",
+      "sha256": "bbd388b7eb74243658f374a73dfa4a1de1b0a374d546074e7b6fb2078b5c678f",
+      "vertices": 8,
+      "edges": 7,
+      "density": 0.25,
+      "seed": 20261125,
+      "family": "constructed_path",
+      "case": "favorable_positive",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/gnp_v008.graph",
+      "sha256": "6e1f4564624cca59b8c9d1b15ea3ccb68c4e71329096f5377e8e731c3bb3d123",
+      "vertices": 8,
+      "edges": 16,
+      "density": 0.5714285714285714,
+      "seed": 20262125,
+      "family": "gnp_p050",
+      "case": "random",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/path_v010.graph",
+      "sha256": "7c787377e7418b0a40d783513ef2884766840130aaf8619e361e1ae1c3fc862d",
+      "vertices": 10,
+      "edges": 9,
+      "density": 0.2,
+      "seed": 20261127,
+      "family": "constructed_path",
+      "case": "favorable_positive",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/gnp_v010.graph",
+      "sha256": "1050b461e453fbbf9dbc2ba90723f16903cd69a7e7465a7e1b5cd975ad4af85a",
+      "vertices": 10,
+      "edges": 17,
+      "density": 0.37777777777777777,
+      "seed": 20262127,
+      "family": "gnp_p050",
+      "case": "random",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/path_v013.graph",
+      "sha256": "11c2f6265bd543bce264e8f2223a70ebaa4ea7c4639abdb6a7c4275fd13af780",
+      "vertices": 13,
+      "edges": 12,
+      "density": 0.15384615384615385,
+      "seed": 20261130,
+      "family": "constructed_path",
+      "case": "favorable_positive",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/gnp_v013.graph",
+      "sha256": "8a046ce891a653f21170c9abe98f5679de27d5e1ad67acf8d86e200483d39004",
+      "vertices": 13,
+      "edges": 38,
+      "density": 0.48717948717948717,
+      "seed": 20262130,
+      "family": "gnp_p050",
+      "case": "random",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/path_v016.graph",
+      "sha256": "b23c1e21eff464f58e9e03203cb2a559abcace4acb24506f6971d72d4207619c",
+      "vertices": 16,
+      "edges": 15,
+      "density": 0.125,
+      "seed": 20261133,
+      "family": "constructed_path",
+      "case": "favorable_positive",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/gnp_v016.graph",
+      "sha256": "0c1a67fbd79076b5e85c21da292930b32c0f0cfd0d9bdc2b3e5b73e487ef6677",
+      "vertices": 16,
+      "edges": 52,
+      "density": 0.43333333333333335,
+      "seed": 20262133,
+      "family": "gnp_p050",
+      "case": "random",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/path_v020.graph",
+      "sha256": "40c1611f51f6eedb09a3f701958bacf8330a2d961f4635384d215e5e98ef835a",
+      "vertices": 20,
+      "edges": 19,
+      "density": 0.1,
+      "seed": 20261137,
+      "family": "constructed_path",
+      "case": "favorable_positive",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/gnp_v020.graph",
+      "sha256": "eb0f7f08351b45a7005e4bd6560b65d7cfceb040e4b29661650b4150551a0e07",
+      "vertices": 20,
+      "edges": 98,
+      "density": 0.5157894736842106,
+      "seed": 20262137,
+      "family": "gnp_p050",
+      "case": "random",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/path_v025.graph",
+      "sha256": "2f8802f97b2bc0504c8488829e4b3f91dbd588e07ad7ec9a1cd58c317dea4869",
+      "vertices": 25,
+      "edges": 24,
+      "density": 0.08,
+      "seed": 20261142,
+      "family": "constructed_path",
+      "case": "favorable_positive",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/gnp_v025.graph",
+      "sha256": "242743ff66b7c73187d7504f33ace47c3a03be100859123e11b6a648739f2d13",
+      "vertices": 25,
+      "edges": 151,
+      "density": 0.5033333333333333,
+      "seed": 20262142,
+      "family": "gnp_p050",
+      "case": "random",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/hard_bipartite_v004.graph",
+      "sha256": "c56bcff64367e8066bb8526d5c11a3b4efce18b12f122f13f4ebb466ba50f56f",
+      "vertices": 4,
+      "edges": 3,
+      "density": 0.5,
+      "seed": 20263121,
+      "family": "unbalanced_bipartite",
+      "case": "hard_negative",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/hard_bipartite_v005.graph",
+      "sha256": "01ed8b2d653b756d6ecdc5e30be15d79580a016028d0ed62a6d4fbca5a037ec2",
+      "vertices": 5,
+      "edges": 4,
+      "density": 0.4,
+      "seed": 20263122,
+      "family": "unbalanced_bipartite",
+      "case": "hard_negative",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/hard_bipartite_v006.graph",
+      "sha256": "5b99a622f5d296f96a755a4c52d5450f326ac04f86639f1b439b85aceadc400e",
+      "vertices": 6,
+      "edges": 8,
+      "density": 0.5333333333333333,
+      "seed": 20263123,
+      "family": "unbalanced_bipartite",
+      "case": "hard_negative",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/hard_bipartite_v008.graph",
+      "sha256": "fcab98ff97306d0db0b9a09a9b1882cd25c976b06395607bf089a2c82951557c",
+      "vertices": 8,
+      "edges": 15,
+      "density": 0.5357142857142857,
+      "seed": 20263125,
+      "family": "unbalanced_bipartite",
+      "case": "hard_negative",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/hard_bipartite_v010.graph",
+      "sha256": "068115cfb53872d84f6bb15ce8d16412d13eab910df165dce530688ecb5a228c",
+      "vertices": 10,
+      "edges": 24,
+      "density": 0.5333333333333333,
+      "seed": 20263127,
+      "family": "unbalanced_bipartite",
+      "case": "hard_negative",
+      "suite": "paired"
+    },
+    {
+      "file": "paired/hard_bipartite_v012.graph",
+      "sha256": "f0530f504cf35d7d8aa42a3d480a1d398c427a846252be52174f0b08fb4898b4",
+      "vertices": 12,
+      "edges": 35,
+      "density": 0.5303030303030303,
+      "seed": 20263129,
+      "family": "unbalanced_bipartite",
+      "case": "hard_negative",
+      "suite": "paired"
+    },
+    {
+      "file": "pilot/hard_bipartite_v008.graph",
+      "sha256": "06aeee35b492a9f1f97dbf948caf63b5e9c50a7cc56c94f4bb1eb432342ca06e",
+      "vertices": 8,
+      "edges": 15,
+      "density": 0.5357142857142857,
+      "seed": 20264125,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "pilot/hard_bipartite_v010.graph",
+      "sha256": "6a9574cf269c100633554c1dbbf8bebce610c1fb8b3e112e0614a3e8bfa825dd",
+      "vertices": 10,
+      "edges": 24,
+      "density": 0.5333333333333333,
+      "seed": 20264127,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "pilot/hard_bipartite_v012.graph",
+      "sha256": "691bd294c702996055c3d7e81d4a26489a4458e81795cbe63b5bbd3b03a6dfd7",
+      "vertices": 12,
+      "edges": 35,
+      "density": 0.5303030303030303,
+      "seed": 20264129,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "pilot/hard_bipartite_v014.graph",
+      "sha256": "84a3ab7cc15ebf8c31af1848fbf9fa980d68411d9b2f61ee709fd86a83a7ebc7",
+      "vertices": 14,
+      "edges": 48,
+      "density": 0.5274725274725275,
+      "seed": 20264131,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "pilot/hard_bipartite_v016.graph",
+      "sha256": "cc375549ca3c2d00f0690d1d13778bae787ef5ec0bd76025d9bfd094ca0a1ee2",
+      "vertices": 16,
+      "edges": 63,
+      "density": 0.525,
+      "seed": 20264133,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "eulerian-scale/cycle_v01000.graph",
+      "sha256": "20b39a537fa014d7df93341ec08c08f0de514adbb11ca8745cc18c94cee26a8a",
+      "vertices": 1000,
+      "edges": 1000,
+      "density": 0.002002002002002002,
+      "seed": 20266117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v02000.graph",
+      "sha256": "18c2cba8404a75793d5ed26a103b4d1472b17dafd825a6135030ba3037867fb1",
+      "vertices": 2000,
+      "edges": 2000,
+      "density": 0.0010005002501250625,
+      "seed": 20267117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v04000.graph",
+      "sha256": "52a65c50e95dadf8de8c6fd56cadd6c4b382a917f6fe360804478157797c4642",
+      "vertices": 4000,
+      "edges": 4000,
+      "density": 0.0005001250312578145,
+      "seed": 20269117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v08000.graph",
+      "sha256": "dd954cd07e7b9474a4126a03f360d4c2d3550c8bca2e51da65fbb544bfd97ff7",
+      "vertices": 8000,
+      "edges": 8000,
+      "density": 0.00025003125390673836,
+      "seed": 20273117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v16000.graph",
+      "sha256": "b905158d0950a6d7fce198c9165d7e1fe8a2b2c2ca7840382665df01dbd6889f",
+      "vertices": 16000,
+      "edges": 16000,
+      "density": 0.00012500781298831177,
+      "seed": 20281117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    },
+    {
+      "file": "eulerian-scale/cycle_v32000.graph",
+      "sha256": "e069bfa3705531a8819893c99eff20326f75f9eafc5c516e882034ae22865a33",
+      "vertices": 32000,
+      "edges": 32000,
+      "density": 6.250195318603706e-05,
+      "seed": 20297117,
+      "family": "constructed_cycle_scale",
+      "case": "linear_positive",
+      "suite": "eulerian-scale"
+    }
+  ]
+}

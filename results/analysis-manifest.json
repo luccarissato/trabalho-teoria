@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "exclusion_rule": "Tempo: status=completed, valid=true e timeout=false. Memória: status=completed, timeout=false e pico disponível. Nenhum outlier válido é removido.",
+  "inputs": [
+    {
+      "file": "results/raw/paired_timing.csv",
+      "sha256": "e23c3b4338dda60827eb6e53d7335bd4eb40c98a4d51a1d2c63e8b62450aad6b"
+    },
+    {
+      "file": "results/raw/eulerian_scale_timing.csv",
+      "sha256": "156b3e27233faf957486467a9fd06f1e49083c53e1c66de7d41f73e807411622"
+    },
+    {
+      "file": "results/raw/paired_memory.csv",
+      "sha256": "3df38663a9addd23bc81c25c93062fc27d46de38f1c459b722f94bccf513fbd5"
+    },
+    {
+      "file": "results/raw/eulerian_scale_memory.csv",
+      "sha256": "ff6d9631749ae57d4e66be1710b71bfc7416544cca11f74acd63bbe3c60a8278"
+    },
+    {
+      "file": "results/raw/pilot_timing.csv",
+      "sha256": "9525ec5c8697c72cb37d78744593651c72af59fd4f841610f3705d6a73c858df"
+    },
+    {
+      "file": "datasets/experimental-manifest.json",
+      "sha256": "beb18cbc0891ae3549e4533c4150d55a8bf89a9866ee37a28488ddb0cfd46fef"
+    }
+  ],
+  "outputs": [
+    {
+      "file": "results/charts/euler_ratio.svg",
+      "sha256": "caca473e7d500881c0242033924960667822d6f54c7ca449b9eefca75d45eb95"
+    },
+    {
+      "file": "results/charts/euler_time_loglog.svg",
+      "sha256": "90ca8390991044381f388c47faf7403f0a4df0f3e0bc9ff04fe08b4b80488c97"
+    },
+    {
+      "file": "results/charts/hamilton_states.svg",
+      "sha256": "2511f24ad2c223c4f58be4e4106305c0c917d300bdc26134816b4a52a96a5fae"
+    },
+    {
+      "file": "results/charts/hamilton_time.svg",
+      "sha256": "07f6923189db6574ddd5a0bde29cd9fced2d232da52790e7ac6672a1bafd7224"
+    },
+    {
+      "file": "results/charts/language_ratio.svg",
+      "sha256": "9925ad2e1a468c1e94cd482845f031e1868793e0c0fe41f90d8ef83bb4b68f6b"
+    },
+    {
+      "file": "results/charts/memory_increment.svg",
+      "sha256": "ddf3de72a138965f1bf4a5f70f7e99b0bfd6ba35743a8b945a7cbbf13dcdc3d9"
+    },
+    {
+      "file": "results/charts/memory_peak.svg",
+      "sha256": "1d4edbdc35dec56c61a394bf05d8d81c218bfa2eb9c56638c7de3d4ce64a1618"
+    },
+    {
+      "file": "results/charts/paired_algorithms.svg",
+      "sha256": "d3be7e5b0ac247eb9338107651504b0a256085973ed3ea8a7abceee23b63a597"
+    },
+    {
+      "file": "results/summary/memory.csv",
+      "sha256": "64d11b9be2abc714916e8939ff24fc259c1d7954984fc22f5b218d9a9442d460"
+    },
+    {
+      "file": "results/summary/summary.txt",
+      "sha256": "23b81af5de2dd541a89f640266bae7adada09250e7e9583ef0b84148766ed15b"
+    },
+    {
+      "file": "results/summary/timing.csv",
+      "sha256": "f3c61eb65f0c2c52ee2ea36ceb3a1422751dbb661520d4df50157fa5081367c6"
+    },
+    {
+      "file": "results/summary/viability.csv",
+      "sha256": "376648e086aaf68815b345a34721d922e4c9e2bb5e12d0f9d2c54b4c35473c80"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+# Resumo experimental
+
+Linhas inválidas e timeouts não são convertidos em tempos. Nenhum outlier válido foi removido.
+
+## Viabilidade do backtracking no piloto
+
+| Linguagem | Família | Maior V concluído | Primeiro V censurado |
+|---|---|---:|---:|
+| c | unbalanced_bipartite_pilot | 14 | 16 |
+| python | unbalanced_bipartite_pilot | 14 | 16 |
+
+## Hierholzer - suíte de escala
+
+Inclinação log-log: C = 1.1718; Python = 0.9726. Um valor próximo de 1 é compatível com crescimento linear.
+
+| Linguagem | V | E | Média (ns) | Desvio-padrão (ns) | T/(V+E) |
+|---|---:|---:|---:|---:|---:|
+| c | 1000 | 1000 | 20751.15 | 2020.04 | 10.3756 |
+| c | 2000 | 2000 | 44386.50 | 4015.58 | 11.0966 |
+| c | 4000 | 4000 | 133507.45 | 9656.76 | 16.6884 |
+| c | 8000 | 8000 | 252022.75 | 16698.14 | 15.7514 |
+| c | 16000 | 16000 | 549592.35 | 73657.43 | 17.1748 |
+| c | 32000 | 32000 | 1189560.00 | 273065.72 | 18.5869 |
+| python | 1000 | 1000 | 1078036.40 | 239182.70 | 539.0182 |
+| python | 2000 | 2000 | 2052871.35 | 418534.15 | 513.2178 |
+| python | 4000 | 4000 | 3822570.00 | 383893.55 | 477.8213 |
+| python | 8000 | 8000 | 7820420.00 | 1409134.03 | 488.7763 |
+| python | 16000 | 16000 | 15671690.00 | 1298743.00 | 489.7403 |
+| python | 32000 | 32000 | 30923825.00 | 3223841.16 | 483.1848 |
+
+## Memória - extremos medidos
+
+| Linguagem | Problema | Família | V | Pico médio (bytes) | Incremento aproximado (bytes) |
+|---|---|---|---:|---:|---:|
+| c | eulerian | constructed_cycle_scale | 32000 | 6887014.40 | 360448.00 |
+| c | eulerian | constructed_path | 25 | 3974212.27 | 0.00 |
+| c | hamiltonian | constructed_path | 25 | 3984042.67 | 0.00 |
+| python | eulerian | constructed_cycle_scale | 32000 | 39030237.87 | 12288.00 |
+| python | eulerian | constructed_path | 25 | 18280721.07 | 53248.00 |
+| python | hamiltonian | constructed_path | 25 | 18304204.80 | 0.00 |

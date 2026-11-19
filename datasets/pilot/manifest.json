@@ -1,0 +1,63 @@
+{
+  "format": "TC_GRAPH 1",
+  "suite": "pilot",
+  "generator_seed": 20261117,
+  "graph_count": 5,
+  "graphs": [
+    {
+      "file": "pilot/hard_bipartite_v008.graph",
+      "sha256": "06aeee35b492a9f1f97dbf948caf63b5e9c50a7cc56c94f4bb1eb432342ca06e",
+      "vertices": 8,
+      "edges": 15,
+      "density": 0.5357142857142857,
+      "seed": 20264125,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "pilot/hard_bipartite_v010.graph",
+      "sha256": "6a9574cf269c100633554c1dbbf8bebce610c1fb8b3e112e0614a3e8bfa825dd",
+      "vertices": 10,
+      "edges": 24,
+      "density": 0.5333333333333333,
+      "seed": 20264127,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "pilot/hard_bipartite_v012.graph",
+      "sha256": "691bd294c702996055c3d7e81d4a26489a4458e81795cbe63b5bbd3b03a6dfd7",
+      "vertices": 12,
+      "edges": 35,
+      "density": 0.5303030303030303,
+      "seed": 20264129,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "pilot/hard_bipartite_v014.graph",
+      "sha256": "84a3ab7cc15ebf8c31af1848fbf9fa980d68411d9b2f61ee709fd86a83a7ebc7",
+      "vertices": 14,
+      "edges": 48,
+      "density": 0.5274725274725275,
+      "seed": 20264131,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    },
+    {
+      "file": "pilot/hard_bipartite_v016.graph",
+      "sha256": "cc375549ca3c2d00f0690d1d13778bae787ef5ec0bd76025d9bfd094ca0a1ee2",
+      "vertices": 16,
+      "edges": 63,
+      "density": 0.525,
+      "seed": 20264133,
+      "family": "unbalanced_bipartite_pilot",
+      "case": "hard_negative",
+      "suite": "pilot"
+    }
+  ]
+}
