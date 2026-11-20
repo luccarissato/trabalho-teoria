@@ -226,7 +226,7 @@ O manifesto experimental gerado com a campanha registra timestamp, commit, estad
 
 Os dados abaixo precisam ser substituídos pelos nomes e pelas contribuições reais antes da exportação do PDF final. Eles não foram inventados durante a automação do projeto.
 
-| Integrante | Contribuições verificadas pelo grupo |
+| Integrante |
 |---|---|
 | `Lucca Rissato` |
 | `Marco Aurelio` |
