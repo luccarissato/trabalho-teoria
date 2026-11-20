@@ -222,12 +222,10 @@ Os experimentos tornam a distinção concreta sem constituírem prova de complex
 
 O manifesto experimental gerado com a campanha registra timestamp, commit, estado da árvore versionada, CPU, RAM, Windows, modo de energia, PowerShell, executáveis, versões e timers. O ambiente possui Intel Core i7-7700HQ, 17.033.236.480 bytes de RAM e Windows NT build 26200 em modo Equilibrado. C17 foi compilado com GCC 16.2.0 e flags `-std=c17 -O2 -Wall -Wextra -Wpedantic`; Python 3.14.10 usou CPython com JIT experimental desativado.
 
-## Contribuições dos integrantes
+## Participantes do Grupo
 
-Os dados abaixo precisam ser substituídos pelos nomes e pelas contribuições reais antes da exportação do PDF final. Eles não foram inventados durante a automação do projeto.
 
-| Integrante |
-|---|---|
+
 | `Lucca Rissato` |
 | `Marco Aurelio` |
 | `Luiz Gonzaga` |
@@ -236,7 +234,7 @@ Os dados abaixo precisam ser substituídos pelos nomes e pelas contribuições r
 
 ## Declaração de uso de IA
 
-Foi utilizado OpenAI Codex como apoio no planejamento, criação e refatoração das implementações para C17 e Python, elaboração dos testes automatizados, instrumentação de tempo e memória, geração dos datasets, execução assistida da campanha, criação dos gráficos SVG, análise estatística e redação preliminar deste relatório. O grupo deve revisar, compreender e ser capaz de explicar todo o código, os dados e a análise antes da entrega.
+Foi utilizado OpenAI Codex como apoio no planejamento, criação e refatoração das implementações para C17 e Python, elaboração dos testes automatizados, instrumentação de tempo e memória, geração dos datasets, execução assistida da campanha, criação dos gráficos SVG, análise estatística e redação preliminar deste relatório.
 
 ## Referências
 
