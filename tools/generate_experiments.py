@@ -5,6 +5,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from file_hash import canonical_sha256
+
 from generate import (
     GeneratedGraph,
     complete_bipartite,
@@ -164,7 +166,7 @@ def main() -> int:
     for suite, items in suites.items():
         all_entries.extend(write_suite(root, suite, items, args.seed))
 
-    generator_hash = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    generator_hash = canonical_sha256(Path(__file__))
     manifest = {
         "format": "TC_GRAPH 1",
         "suite_version": 1,

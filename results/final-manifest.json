@@ -1,9 +1,10 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "hash_line_endings": "LF",
   "project": "Caminho Euleriano x Caminho Hamiltoniano",
-  "base_commit": "d3156484bdf1ea87b4fea5d9f7129a7dcec1309c",
+  "base_commit": "40cb926fcf3893b50061ef0f869fa45dbe341cb2",
   "tracked_worktree_dirty": true,
-  "source_tree_sha256": "3407356123868f192c57dfb4778bdafaf4358cbc10e8fb4d02ce782b4cb03306",
+  "source_tree_sha256": "a5d80553265b6a3842390e023b6abadce13cfcec0eebd62a8e109e2227263abe",
   "commands": {
     "quick_validation": "powershell -ExecutionPolicy Bypass -File .\\tools\\run-all.ps1 -Quick",
     "full_reproduction": "powershell -ExecutionPolicy Bypass -File .\\tools\\run-all.ps1 -Full"
@@ -37,9 +38,9 @@
   },
   "datasets": {
     "manifest": "datasets/experimental-manifest.json",
-    "manifest_sha256": "beb18cbc0891ae3549e4533c4150d55a8bf89a9866ee37a28488ddb0cfd46fef",
+    "manifest_sha256": "c34b5c7127101f76db3dd10193e9d80c01751c4025e06881208c06e3826f2fc8",
     "generator": "tools/generate_experiments.py",
-    "generator_sha256": "aa1539af0c1c64458e28e145be81dc54aeed8f365e8d2c27928df3ce13c179dc",
+    "generator_sha256": "85d499d7bc35624ecdef53081269093722706e5df7d0eb9c8b37b495131ae73b",
     "seed": 20261117,
     "graph_count": 29
   },
@@ -50,7 +51,7 @@
       "sources": [
         {
           "file": "results/raw/eulerian_scale_timing.csv",
-          "sha256": "156b3e27233faf957486467a9fd06f1e49083c53e1c66de7d41f73e807411622"
+          "sha256": "08ce28ad8e211bebcc845c7a75d1111aef19b7369864f0cbe304cb17af0cc5e2"
         },
         {
           "file": "results/summary/timing.csv",
@@ -64,7 +65,7 @@
       "sources": [
         {
           "file": "results/raw/eulerian_scale_timing.csv",
-          "sha256": "156b3e27233faf957486467a9fd06f1e49083c53e1c66de7d41f73e807411622"
+          "sha256": "08ce28ad8e211bebcc845c7a75d1111aef19b7369864f0cbe304cb17af0cc5e2"
         },
         {
           "file": "results/summary/timing.csv",
@@ -78,7 +79,7 @@
       "sources": [
         {
           "file": "results/raw/paired_timing.csv",
-          "sha256": "e23c3b4338dda60827eb6e53d7335bd4eb40c98a4d51a1d2c63e8b62450aad6b"
+          "sha256": "eb6585224ba5c6704db7183e7519ff560b49b27bb89cb8727cd2fcc10114917f"
         },
         {
           "file": "results/summary/timing.csv",
@@ -92,11 +93,39 @@
       "sources": [
         {
           "file": "results/raw/paired_timing.csv",
-          "sha256": "e23c3b4338dda60827eb6e53d7335bd4eb40c98a4d51a1d2c63e8b62450aad6b"
+          "sha256": "eb6585224ba5c6704db7183e7519ff560b49b27bb89cb8727cd2fcc10114917f"
         },
         {
           "file": "results/summary/timing.csv",
           "sha256": "f3c61eb65f0c2c52ee2ea36ceb3a1422751dbb661520d4df50157fa5081367c6"
+        }
+      ]
+    },
+    "hamilton_ratio.svg": {
+      "file": "results/charts/hamilton_ratio.svg",
+      "sha256": "3e9176d4c68d26c73a0ec4b813878fff60ed2b5e6dc9e5c83c677349e8ad8ce2",
+      "sources": [
+        {
+          "file": "results/raw/paired_timing.csv",
+          "sha256": "eb6585224ba5c6704db7183e7519ff560b49b27bb89cb8727cd2fcc10114917f"
+        },
+        {
+          "file": "results/summary/timing.csv",
+          "sha256": "f3c61eb65f0c2c52ee2ea36ceb3a1422751dbb661520d4df50157fa5081367c6"
+        },
+        {
+          "file": "datasets/experimental-manifest.json",
+          "sha256": "c34b5c7127101f76db3dd10193e9d80c01751c4025e06881208c06e3826f2fc8"
+        }
+      ]
+    },
+    "hamilton_viability.svg": {
+      "file": "results/charts/hamilton_viability.svg",
+      "sha256": "c986d4d07611aa9475786f2c177632ea22e64afb1864ce72c7cc35ca881ab95f",
+      "sources": [
+        {
+          "file": "results/raw/pilot_timing.csv",
+          "sha256": "27a397fbf6f1041d31f62fc78613f55f9912df55aa87e0f12deb143437998c33"
         }
       ]
     },
@@ -106,7 +135,7 @@
       "sources": [
         {
           "file": "results/raw/paired_timing.csv",
-          "sha256": "e23c3b4338dda60827eb6e53d7335bd4eb40c98a4d51a1d2c63e8b62450aad6b"
+          "sha256": "eb6585224ba5c6704db7183e7519ff560b49b27bb89cb8727cd2fcc10114917f"
         },
         {
           "file": "results/summary/timing.csv",
@@ -120,7 +149,7 @@
       "sources": [
         {
           "file": "results/raw/paired_timing.csv",
-          "sha256": "e23c3b4338dda60827eb6e53d7335bd4eb40c98a4d51a1d2c63e8b62450aad6b"
+          "sha256": "eb6585224ba5c6704db7183e7519ff560b49b27bb89cb8727cd2fcc10114917f"
         },
         {
           "file": "results/summary/timing.csv",
@@ -134,11 +163,11 @@
       "sources": [
         {
           "file": "results/raw/paired_memory.csv",
-          "sha256": "3df38663a9addd23bc81c25c93062fc27d46de38f1c459b722f94bccf513fbd5"
+          "sha256": "c68b8ec616c007154963bde75ae564e461b9a301df521a91b1d3267d0fad3762"
         },
         {
           "file": "results/raw/eulerian_scale_memory.csv",
-          "sha256": "ff6d9631749ae57d4e66be1710b71bfc7416544cca11f74acd63bbe3c60a8278"
+          "sha256": "1c9ad69ff96884c4b74ae7c201be861129bafa3d27fb398da1cdac13b4788cd3"
         },
         {
           "file": "results/summary/memory.csv",
@@ -152,11 +181,11 @@
       "sources": [
         {
           "file": "results/raw/paired_memory.csv",
-          "sha256": "3df38663a9addd23bc81c25c93062fc27d46de38f1c459b722f94bccf513fbd5"
+          "sha256": "c68b8ec616c007154963bde75ae564e461b9a301df521a91b1d3267d0fad3762"
         },
         {
           "file": "results/raw/eulerian_scale_memory.csv",
-          "sha256": "ff6d9631749ae57d4e66be1710b71bfc7416544cca11f74acd63bbe3c60a8278"
+          "sha256": "1c9ad69ff96884c4b74ae7c201be861129bafa3d27fb398da1cdac13b4788cd3"
         },
         {
           "file": "results/summary/memory.csv",
@@ -168,8 +197,8 @@
   "files": [
     {
       "file": ".gitignore",
-      "sha256": "5338fd7f8a4d7781a204f9a8305caf87e773cfa63322f9ab63eca600def266e9",
-      "bytes": 256
+      "sha256": "176a97d80b00e8a82901b302e4b4947bf8b6acd2f75bd3b4f0631292e4684e53",
+      "bytes": 252
     },
     {
       "file": "c/src/main.c",
@@ -258,7 +287,7 @@
     },
     {
       "file": "datasets/experimental-manifest.json",
-      "sha256": "beb18cbc0891ae3549e4533c4150d55a8bf89a9866ee37a28488ddb0cfd46fef",
+      "sha256": "c34b5c7127101f76db3dd10193e9d80c01751c4025e06881208c06e3826f2fc8",
       "bytes": 10323
     },
     {
@@ -392,11 +421,6 @@
       "bytes": 1843
     },
     {
-      "file": "PLANO_CODIGO.md",
-      "sha256": "fbb184168840bc982b30b8c040845e01c59178de20a94c45c57e52f25f33cd7d",
-      "bytes": 22209
-    },
-    {
       "file": "python/src/algorithms.py",
       "sha256": "9f8aa98246c4d5ede2f6eea8e92cb01f13b808c7d461ee991ccc1aaf7d52e128",
       "bytes": 3002
@@ -413,18 +437,13 @@
     },
     {
       "file": "README.md",
-      "sha256": "5ca4b7eb50bdb840354baacb95a71b2adeb85ad441d1f24d78f8fb9cc28b30b5",
-      "bytes": 8120
-    },
-    {
-      "file": "relatorio.md",
-      "sha256": "a1ed03ab2b3a54b249fbe93c66684438c37391ee23cc437d52f7ab7998809f09",
-      "bytes": 21907
+      "sha256": "b99f5c077b5073ac7ee6fa284d6211eaf98bfbc408c49ee4a970f091ba2892f2",
+      "bytes": 8350
     },
     {
       "file": "results/analysis-manifest.json",
-      "sha256": "38fba30f2f2a67b4002f1042a253637c4ba1e22f0c8be875f8027eadff27dbc3",
-      "bytes": 2858
+      "sha256": "f765fc14dbde28010b16f34478bf54abb74c299e5e43165a6e3a95bf8ec40a62",
+      "bytes": 3216
     },
     {
       "file": "results/charts/euler_ratio.svg",
@@ -437,6 +456,11 @@
       "bytes": 4830
     },
     {
+      "file": "results/charts/hamilton_ratio.svg",
+      "sha256": "3e9176d4c68d26c73a0ec4b813878fff60ed2b5e6dc9e5c83c677349e8ad8ce2",
+      "bytes": 4761
+    },
+    {
       "file": "results/charts/hamilton_states.svg",
       "sha256": "2511f24ad2c223c4f58be4e4106305c0c917d300bdc26134816b4a52a96a5fae",
       "bytes": 5797
@@ -445,6 +469,11 @@
       "file": "results/charts/hamilton_time.svg",
       "sha256": "07f6923189db6574ddd5a0bde29cd9fced2d232da52790e7ac6672a1bafd7224",
       "bytes": 9114
+    },
+    {
+      "file": "results/charts/hamilton_viability.svg",
+      "sha256": "c986d4d07611aa9475786f2c177632ea22e64afb1864ce72c7cc35ca881ab95f",
+      "bytes": 4534
     },
     {
       "file": "results/charts/language_ratio.svg",
@@ -468,33 +497,33 @@
     },
     {
       "file": "results/manifest.json",
-      "sha256": "47afa68b767c1d11d824880831be1eefbbb8e6f8b17b030b0d98c341578009fe",
-      "bytes": 1073
+      "sha256": "2b771244e075fa451c22e423e0913dece489b8ad42487fac249c00eb0bacab3d",
+      "bytes": 1047
     },
     {
       "file": "results/raw/eulerian_scale_memory.csv",
-      "sha256": "ff6d9631749ae57d4e66be1710b71bfc7416544cca11f74acd63bbe3c60a8278",
-      "bytes": 99488
+      "sha256": "1c9ad69ff96884c4b74ae7c201be861129bafa3d27fb398da1cdac13b4788cd3",
+      "bytes": 99127
     },
     {
       "file": "results/raw/eulerian_scale_timing.csv",
-      "sha256": "156b3e27233faf957486467a9fd06f1e49083c53e1c66de7d41f73e807411622",
-      "bytes": 77387
+      "sha256": "08ce28ad8e211bebcc845c7a75d1111aef19b7369864f0cbe304cb17af0cc5e2",
+      "bytes": 77146
     },
     {
       "file": "results/raw/paired_memory.csv",
-      "sha256": "3df38663a9addd23bc81c25c93062fc27d46de38f1c459b722f94bccf513fbd5",
-      "bytes": 185162
+      "sha256": "c68b8ec616c007154963bde75ae564e461b9a301df521a91b1d3267d0fad3762",
+      "bytes": 184441
     },
     {
       "file": "results/raw/paired_timing.csv",
-      "sha256": "e23c3b4338dda60827eb6e53d7335bd4eb40c98a4d51a1d2c63e8b62450aad6b",
-      "bytes": 414796
+      "sha256": "eb6585224ba5c6704db7183e7519ff560b49b27bb89cb8727cd2fcc10114917f",
+      "bytes": 413355
     },
     {
       "file": "results/raw/pilot_timing.csv",
-      "sha256": "9525ec5c8697c72cb37d78744593651c72af59fd4f841610f3705d6a73c858df",
-      "bytes": 3341
+      "sha256": "27a397fbf6f1041d31f62fc78613f55f9912df55aa87e0f12deb143437998c33",
+      "bytes": 3330
     },
     {
       "file": "results/summary/memory.csv",
@@ -518,13 +547,13 @@
     },
     {
       "file": "tests/correctness.py",
-      "sha256": "2ed5e1e18fb1c58e65eeab66d7df6c2ea0923a6e8ac557fe153856f99943ebe6",
-      "bytes": 9406
+      "sha256": "53c1484941bb87426e5c665aa52b155b556b7807d03754f0fd0cdecf3fa4713c",
+      "bytes": 9436
     },
     {
       "file": "tools/analyze.py",
-      "sha256": "170868f3417ea0f0d01c132221486da2d6697d7df84e71dd916c3ce1e0c354f9",
-      "bytes": 22601
+      "sha256": "375b961444d727bec3004329db31fc307d926c117fe5ad2e52a628ecfc1cc8ff",
+      "bytes": 26676
     },
     {
       "file": "tools/benchmark-common.ps1",
@@ -533,8 +562,13 @@
     },
     {
       "file": "tools/create_final_manifest.py",
-      "sha256": "e7c2d7e9e49dc3275db6ca7d1e8c6cadc0f92c70540d0dca8e6101f39c79a9cb",
-      "bytes": 5009
+      "sha256": "116a5974a162515e5229f78b3e932264ada433418342d6c12a05032e9697e6be",
+      "bytes": 5051
+    },
+    {
+      "file": "tools/file_hash.py",
+      "sha256": "ca4fb2602b2882b050d43d4c0b6cdad76e90135eead958e567817b9556e7a7d6",
+      "bytes": 469
     },
     {
       "file": "tools/generate.py",
@@ -543,8 +577,8 @@
     },
     {
       "file": "tools/generate_experiments.py",
-      "sha256": "aa1539af0c1c64458e28e145be81dc54aeed8f365e8d2c27928df3ce13c179dc",
-      "bytes": 5597
+      "sha256": "85d499d7bc35624ecdef53081269093722706e5df7d0eb9c8b37b495131ae73b",
+      "bytes": 5614
     },
     {
       "file": "tools/measure-memory.ps1",
@@ -553,8 +587,8 @@
     },
     {
       "file": "tools/run-all.ps1",
-      "sha256": "5256bc5245fb5d5385fa894f5ea322eda1f4007f447513856d491359def55b84",
-      "bytes": 8149
+      "sha256": "68b9e3e416fe3b48159e401e1c42ad05a09492e0c81ec7cf18c7ced18c9b168a",
+      "bytes": 7157
     },
     {
       "file": "tools/run-benchmarks.ps1",
@@ -573,12 +607,8 @@
     },
     {
       "file": "tools/verify_project.py",
-      "sha256": "604e26da8e3c7def993891b015d40ee695ca3113f6f4a80550c3f4f203021b2d",
-      "bytes": 9091
+      "sha256": "aa72bfca6bfda47c98ea335e610d9e7290da3ea9ba382e48c5324455518bb52e",
+      "bytes": 9252
     }
-  ],
-  "human_fields": {
-    "contributions_complete": "PENDING_USER_INPUT",
-    "note": "Preencher nomes e contribuições reais antes de exportar o PDF final."
-  }
+  ]
 }

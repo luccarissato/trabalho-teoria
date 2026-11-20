@@ -58,26 +58,7 @@ function Build-And-Test {
     }
 }
 
-function Compare-FileHashes {
-    param(
-        [string]$ExpectedDirectory,
-        [string]$ActualDirectory,
-        [string[]]$Names
-    )
-    foreach ($name in $Names) {
-        $expected = Join-Path $ExpectedDirectory $name
-        $actual = Join-Path $ActualDirectory $name
-        if (-not (Test-Path -LiteralPath $actual -PathType Leaf)) {
-            throw "Arquivo regenerado ausente: $actual"
-        }
-        $expectedHash = (Get-FileHash -LiteralPath $expected -Algorithm SHA256).Hash
-        $actualHash = (Get-FileHash -LiteralPath $actual -Algorithm SHA256).Hash
-        if ($expectedHash -ne $actualHash) {
-            throw "Hash divergente em $name."
-        }
-    }
-}
-
+$verificationArguments = @('--root', $projectRoot)
 if ($Quick) {
     if (Test-Path -LiteralPath $validationRoot) {
         Remove-Item -LiteralPath $validationRoot -Recurse -Force
@@ -89,6 +70,7 @@ if ($Quick) {
     Invoke-Checked 'Regeneração determinística dos 29 datasets' {
         $temporaryDatasets = Join-Path $validationRoot 'datasets'
         python .\tools\generate_experiments.py --root $temporaryDatasets --seed 20261117
+        if ($LASTEXITCODE -ne 0) { throw 'Falha na geração dos datasets.' }
         $official = Get-Content .\datasets\experimental-manifest.json -Raw -Encoding UTF8 | ConvertFrom-Json
         $regenerated = Get-Content (Join-Path $temporaryDatasets 'experimental-manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
         if ($official.graph_count -ne 29 -or $regenerated.graph_count -ne 29) {
@@ -138,30 +120,20 @@ if ($Quick) {
         $global:LASTEXITCODE = 0
     }
 
-    Invoke-Checked 'Regeneração das tabelas e dos oito gráficos' {
-        $analysisRoot = Join-Path $validationRoot 'analysis'
+    $analysisRoot = Join-Path $validationRoot 'analysis'
+    Invoke-Checked 'Regeneração das tabelas e dos gráficos' {
+        $publishedAnalysis = Get-Content .\results\analysis-manifest.json -Raw -Encoding UTF8 | ConvertFrom-Json
         python .\tools\analyze.py `
             --timing .\results\raw\paired_timing.csv .\results\raw\eulerian_scale_timing.csv `
             --memory .\results\raw\paired_memory.csv .\results\raw\eulerian_scale_memory.csv `
             --pilot .\results\raw\pilot_timing.csv `
+            --pilot-timeout-seconds $publishedAnalysis.pilot_timeout_seconds `
             --datasets-manifest .\datasets\experimental-manifest.json `
             --output $analysisRoot `
             --expected-timing-repetitions 20 `
             --expected-memory-repetitions 15
-        Compare-FileHashes `
-            -ExpectedDirectory .\results\summary `
-            -ActualDirectory (Join-Path $analysisRoot 'summary') `
-            -Names @('timing.csv', 'memory.csv', 'viability.csv', 'summary.txt')
-        Compare-FileHashes `
-            -ExpectedDirectory .\results\charts `
-            -ActualDirectory (Join-Path $analysisRoot 'charts') `
-            -Names @(
-                'euler_ratio.svg', 'euler_time_loglog.svg', 'hamilton_states.svg',
-                'hamilton_time.svg', 'language_ratio.svg', 'memory_increment.svg',
-                'memory_peak.svg', 'paired_algorithms.svg'
-            )
-        $global:LASTEXITCODE = 0
     }
+    $verificationArguments += @('--reproduced-analysis', $analysisRoot)
 } else {
     Build-And-Test
     Write-Host "`n--- Remoção controlada somente de artefatos experimentais gerados ---"
@@ -185,15 +157,14 @@ if ($Quick) {
     }
     Invoke-Checked 'Campanha experimental integral' {
         & .\tools\run-experiments.ps1
-        $global:LASTEXITCODE = 0
+    }
+    Invoke-Checked 'Manifesto final de reprodutibilidade' {
+        python .\tools\create_final_manifest.py --root $projectRoot
     }
 }
 
-Invoke-Checked 'Manifesto final de reprodutibilidade' {
-    python .\tools\create_final_manifest.py --root $projectRoot
-}
-Invoke-Checked 'Auditoria final de dados, documentos e artefatos' {
-    python .\tools\verify_project.py --root $projectRoot
+Invoke-Checked 'Validação dos dados e artefatos experimentais' {
+    python .\tools\verify_project.py @verificationArguments
 }
 
 $modeName = if ($Quick) { 'Quick' } else { 'Full' }

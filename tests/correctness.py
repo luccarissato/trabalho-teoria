@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "python" / "src"))
 sys.path.insert(0, str(ROOT / "tools"))
 
+from file_hash import canonical_sha256  # noqa: E402
 from graph import Graph, load_graph  # noqa: E402
 from validate import validate_eulerian_path, validate_hamiltonian_path  # noqa: E402
 
@@ -160,7 +161,7 @@ def main() -> int:
         for entry in manifest["graphs"]:
             input_path = datasets / entry["file"]
             check(
-                hashlib.sha256(input_path.read_bytes()).hexdigest() == entry["sha256"],
+                canonical_sha256(input_path) == entry["sha256"],
                 f"hash inválido: {entry['file']}",
             )
             graph = load_graph(input_path)

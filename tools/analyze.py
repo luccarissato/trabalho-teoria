@@ -2,14 +2,17 @@ from __future__ import annotations
 
 import argparse
 import csv
-import hashlib
 import html
 import json
 import math
 import statistics
 from collections import defaultdict
+from itertools import zip_longest
 from pathlib import Path
 from typing import Iterable
+
+from file_hash import canonical_sha256
+from generate_experiments import unbalanced_parts
 
 
 TIMING_REQUIRED = {
@@ -49,11 +52,15 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--timing", nargs="+", required=True)
     parser.add_argument("--memory", nargs="+", required=True)
     parser.add_argument("--pilot", required=True)
+    parser.add_argument("--pilot-timeout-seconds", type=int, default=60)
     parser.add_argument("--datasets-manifest", required=True)
     parser.add_argument("--output", default="results")
     parser.add_argument("--expected-timing-repetitions", type=int, default=20)
     parser.add_argument("--expected-memory-repetitions", type=int, default=15)
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.pilot_timeout_seconds <= 0:
+        parser.error("--pilot-timeout-seconds deve ser positivo")
+    return args
 
 
 def read_rows(paths: Iterable[str], required: set[str]) -> list[dict[str, str]]:
@@ -74,6 +81,10 @@ def read_rows(paths: Iterable[str], required: set[str]) -> list[dict[str, str]]:
 
 def is_true(value: str) -> bool:
     return value.strip().lower() == "true"
+
+
+def completed_timing(row: dict[str, str]) -> bool:
+    return row["status"] == "completed" and is_true(row["valid"]) and not is_true(row["timeout"])
 
 
 def integer(row: dict[str, str], field: str) -> int:
@@ -124,11 +135,7 @@ def timing_summary(
 
     summary: list[dict[str, object]] = []
     for key, point_rows in sorted(groups.items()):
-        completed = [
-            row
-            for row in point_rows
-            if row["status"] == "completed" and is_true(row["valid"]) and not is_true(row["timeout"])
-        ]
+        completed = [row for row in point_rows if completed_timing(row)]
         timeouts = sum(is_true(row["timeout"]) for row in point_rows)
         invalid = len(point_rows) - len(completed) - timeouts
         if not timeouts and len(completed) != expected_repetitions:
@@ -235,6 +242,8 @@ def svg_chart(
     *,
     x_log: bool = False,
     y_log: bool = False,
+    x_ticks: tuple[int, ...] = (),
+    censored: tuple[tuple[int, int, str], ...] = (),
 ) -> None:
     prepared: list[tuple[str, list[tuple[float, float]]]] = []
     for label, points in series:
@@ -245,7 +254,7 @@ def svg_chart(
         )
         if clean:
             prepared.append((label, clean))
-    if not prepared:
+    if not prepared and not censored:
         raise ValueError(f"sem dados positivos para o gráfico {path.name}")
 
     transform_x = math.log10 if x_log else lambda value: value
@@ -256,6 +265,8 @@ def svg_chart(
     ]
     all_x = [point[0] for _, points in transformed for point in points]
     all_y = [point[1] for _, points in transformed for point in points]
+    all_x.extend(transform_x(x) for x, _, _ in censored)
+    all_y.extend(transform_y(y) for _, y, _ in censored)
     x_min, x_max = min(all_x), max(all_x)
     y_min, y_max = min(all_y), max(all_y)
     if x_min == x_max:
@@ -266,7 +277,7 @@ def svg_chart(
     y_pad = (y_max - y_min) * 0.10
     x_min, x_max = x_min - x_pad, x_max + x_pad
     y_min, y_max = y_min - y_pad, y_max + y_pad
-    if not y_log and min(y for _, points in prepared for _, y in points) >= 0:
+    if not y_log and min(all_y) >= 0:
         y_min = max(0.0, y_min)
 
     width, height = 960, 600
@@ -295,20 +306,26 @@ def svg_chart(
         '<rect width="100%" height="100%" fill="#ffffff"/>',
         f'<text x="{width/2}" y="34" text-anchor="middle" font-family="Segoe UI,Arial" font-size="22" font-weight="600" fill="#111827">{html.escape(title)}</text>',
     ]
-    for index in range(6):
-        fraction = index / 5
-        x_value = x_min + fraction * (x_max - x_min)
-        y_value = y_min + fraction * (y_max - y_min)
-        x_pixel = sx(x_value)
-        y_pixel = sy(y_value)
-        parts.extend(
-            [
+    fractions = [index / 5 for index in range(6)]
+    x_values = (
+        [transform_x(tick) for tick in x_ticks]
+        if x_ticks
+        else [x_min + fraction * (x_max - x_min) for fraction in fractions]
+    )
+    y_values = [y_min + fraction * (y_max - y_min) for fraction in fractions]
+    for x_value, y_value in zip_longest(x_values, y_values):
+        if x_value is not None:
+            x_pixel = sx(x_value)
+            parts.extend([
                 f'<line x1="{x_pixel:.2f}" y1="{top}" x2="{x_pixel:.2f}" y2="{top+plot_height}" stroke="#e5e7eb"/>',
                 f'<text x="{x_pixel:.2f}" y="{top+plot_height+24}" text-anchor="middle" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">{tick_label(x_value, x_log)}</text>',
+            ])
+        if y_value is not None:
+            y_pixel = sy(y_value)
+            parts.extend([
                 f'<line x1="{left}" y1="{y_pixel:.2f}" x2="{left+plot_width}" y2="{y_pixel:.2f}" stroke="#e5e7eb"/>',
                 f'<text x="{left-12}" y="{y_pixel+4:.2f}" text-anchor="end" font-family="Segoe UI,Arial" font-size="12" fill="#4b5563">{tick_label(y_value, y_log)}</text>',
-            ]
-        )
+            ])
     parts.extend(
         [
             f'<line x1="{left}" y1="{top+plot_height}" x2="{left+plot_width}" y2="{top+plot_height}" stroke="#111827" stroke-width="1.5"/>',
@@ -331,6 +348,19 @@ def svg_chart(
             [
                 f'<line x1="{legend_x}" y1="{legend_y}" x2="{legend_x+24}" y2="{legend_y}" stroke="{color}" stroke-width="3"/>',
                 f'<text x="{legend_x+31}" y="{legend_y+4}" font-family="Segoe UI,Arial" font-size="12" fill="#111827">{html.escape(label)}</text>',
+            ]
+        )
+    for vertices, seconds, languages in censored:
+        x_pixel = sx(transform_x(vertices))
+        y_pixel = sy(transform_y(seconds))
+        label = f"V={vertices}, timeout de {seconds} s ({languages})"
+        anchor = "end" if x_pixel > left + plot_width / 2 else "start"
+        label_x = x_pixel - 10 if anchor == "end" else x_pixel + 10
+        parts.extend(
+            [
+                f'<line x1="{x_pixel:.2f}" y1="{y_pixel:.2f}" x2="{x_pixel:.2f}" y2="{top+plot_height}" stroke="#4b5563" stroke-dasharray="4 4"/>',
+                f'<path d="M {x_pixel:.2f} {y_pixel-6:.2f} l -6 11 h 12 z" fill="white" stroke="#4b5563" stroke-width="2"><title>{html.escape(label)}</title></path>',
+                f'<text x="{label_x:.2f}" y="{y_pixel-8:.2f}" text-anchor="{anchor}" font-family="Segoe UI,Arial" font-size="13" fill="#111827">{html.escape(label)}</text>',
             ]
         )
     parts.append("</svg>\n")
@@ -422,8 +452,78 @@ def write_markdown_summary(
     path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
-def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+def summarize_pilot(rows: list[dict[str, str]]) -> list[dict[str, object]]:
+    groups: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
+    for row in rows:
+        groups[(row["language"], row["family"])].append(row)
+
+    viability: list[dict[str, object]] = []
+    for (language, family), observations in sorted(groups.items()):
+        completed = [integer(row, "V") for row in observations if completed_timing(row)]
+        timed_out = [integer(row, "V") for row in observations if is_true(row["timeout"])]
+        viability.append(
+            {
+                "language": language,
+                "family": family,
+                "largest_completed_V": max(completed) if completed else "",
+                "first_timeout_V": min(timed_out) if timed_out else "",
+            }
+        )
+    return viability
+
+
+def plot_hamilton_viability(
+    path: Path, pilot: list[dict[str, str]], timeout_seconds: int
+) -> None:
+    language_names = {"c": "C", "python": "Python"}
+    completed: dict[str, list[tuple[float, float]]] = defaultdict(list)
+    timed_out: dict[int, list[str]] = defaultdict(list)
+    for row in pilot:
+        vertices = integer(row, "V")
+        language = language_names.get(row["language"], row["language"])
+        if completed_timing(row):
+            completed[language].append((vertices, number(row, "elapsed_ns") / 1e9))
+        elif is_true(row["timeout"]):
+            timed_out[vertices].append(language)
+
+    svg_chart(
+        path,
+        "Piloto de viabilidade do backtracking hamiltoniano",
+        "Número de vértices (V)",
+        "Tempo em segundos (log)",
+        sorted(completed.items()),
+        y_log=True,
+        x_ticks=tuple(sorted({integer(row, "V") for row in pilot})),
+        censored=tuple(
+            (vertices, timeout_seconds, " e ".join(sorted(set(languages))))
+            for vertices, languages in sorted(timed_out.items())
+        ),
+    )
+
+
+def plot_hamilton_ratio(path: Path, timing: list[dict[str, object]]) -> None:
+    ratios: dict[str, list[tuple[float, float]]] = defaultdict(list)
+    for row in timing:
+        if (
+            row["problem"] == "hamiltonian"
+            and row["family"] == "unbalanced_bipartite"
+            and row["elapsed_mean_ns"] != ""
+        ):
+            vertices = int(row["V"])
+            a, b = unbalanced_parts(vertices)
+            work = vertices * math.factorial(a) * math.factorial(b)
+            language = str(row["language"]).capitalize()
+            ratios[language].append((vertices, float(row["elapsed_mean_ns"]) / work))
+
+    svg_chart(
+        path,
+        "Backtracking em grafos bipartidos desbalanceados",
+        "Número de vértices (V)",
+        "T(V) / (V × a! × b!), em ns (log)",
+        sorted(ratios.items()),
+        y_log=True,
+        x_ticks=tuple(sorted({vertices for points in ratios.values() for vertices, _ in points})),
+    )
 
 
 def main() -> int:
@@ -445,21 +545,7 @@ def main() -> int:
     write_csv(summary_dir / "timing.csv", timing, timing_fields)
     write_csv(summary_dir / "memory.csv", memory, memory_fields)
 
-    pilot_groups: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
-    for row in pilot_rows:
-        pilot_groups[(row["language"], row["family"])].append(row)
-    viability: list[dict[str, object]] = []
-    for (language, family), rows in sorted(pilot_groups.items()):
-        completed = [integer(row, "V") for row in rows if row["status"] == "completed" and is_true(row["valid"])]
-        timed_out = [integer(row, "V") for row in rows if is_true(row["timeout"])]
-        viability.append(
-            {
-                "language": language,
-                "family": family,
-                "largest_completed_V": max(completed) if completed else "",
-                "first_timeout_V": min(timed_out) if timed_out else "",
-            }
-        )
+    viability = summarize_pilot(pilot_rows)
     write_csv(
         summary_dir / "viability.csv",
         viability,
@@ -502,6 +588,8 @@ def main() -> int:
         "states_mean",
     )
     svg_chart(charts_dir / "hamilton_states.svg", "Estados explorados pelo backtracking", "V", "Estados (log)", hamilton_states, y_log=True)
+    plot_hamilton_ratio(charts_dir / "hamilton_ratio.svg", timing)
+    plot_hamilton_viability(charts_dir / "hamilton_viability.svg", pilot_rows, args.pilot_timeout_seconds)
     paired_algorithms = series_by(
         timing,
         lambda row: row["family"] == "constructed_path",
@@ -545,10 +633,12 @@ def main() -> int:
     source_paths = [Path(path) for path in [*args.timing, *args.memory, args.pilot, args.datasets_manifest]]
     generated_paths = sorted([*summary_dir.glob("*"), *charts_dir.glob("*.svg")])
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
+        "hash_line_endings": "LF",
+        "pilot_timeout_seconds": args.pilot_timeout_seconds,
         "exclusion_rule": "Tempo: status=completed, valid=true e timeout=false. Memória: status=completed, timeout=false e pico disponível. Nenhum outlier válido é removido.",
-        "inputs": [{"file": path.as_posix(), "sha256": sha256(path)} for path in source_paths],
-        "outputs": [{"file": path.as_posix(), "sha256": sha256(path)} for path in generated_paths],
+        "inputs": [{"file": path.as_posix(), "sha256": canonical_sha256(path)} for path in source_paths],
+        "outputs": [{"file": path.as_posix(), "sha256": canonical_sha256(path)} for path in generated_paths],
     }
     (output / "analysis-manifest.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",

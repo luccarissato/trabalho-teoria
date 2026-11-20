@@ -6,12 +6,20 @@ import json
 import subprocess
 from pathlib import Path
 
+from file_hash import canonical_bytes, canonical_sha256
+
 
 FIGURE_SOURCES = {
     "euler_time_loglog.svg": ["results/raw/eulerian_scale_timing.csv", "results/summary/timing.csv"],
     "euler_ratio.svg": ["results/raw/eulerian_scale_timing.csv", "results/summary/timing.csv"],
     "hamilton_time.svg": ["results/raw/paired_timing.csv", "results/summary/timing.csv"],
     "hamilton_states.svg": ["results/raw/paired_timing.csv", "results/summary/timing.csv"],
+    "hamilton_ratio.svg": [
+        "results/raw/paired_timing.csv",
+        "results/summary/timing.csv",
+        "datasets/experimental-manifest.json",
+    ],
+    "hamilton_viability.svg": ["results/raw/pilot_timing.csv"],
     "paired_algorithms.svg": ["results/raw/paired_timing.csv", "results/summary/timing.csv"],
     "language_ratio.svg": ["results/raw/paired_timing.csv", "results/summary/timing.csv"],
     "memory_peak.svg": ["results/raw/paired_memory.csv", "results/raw/eulerian_scale_memory.csv", "results/summary/memory.csv"],
@@ -24,10 +32,6 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--root", default=".")
     parser.add_argument("--output", default="results/final-manifest.json")
     return parser.parse_args()
-
-
-def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def git(root: Path, *arguments: str) -> str:
@@ -48,11 +52,8 @@ def source_files(root: Path, output: Path) -> list[Path]:
         capture_output=True,
     ).stdout
     paths = [root / item.decode("utf-8") for item in raw.split(b"\0") if item]
-    for local_document in (root / "relatorio.md", root / "PLANO_CODIGO.md"):
-        if local_document.is_file():
-            paths.append(local_document)
-    output_resolved = output.resolve()
-    return sorted({path.resolve() for path in paths if path.is_file() and path.resolve() != output_resolved})
+    excluded = {output.resolve(), (root / "relatorio.md").resolve()}
+    return sorted({path.resolve() for path in paths if path.is_file() and path.resolve() not in excluded})
 
 
 def main() -> int:
@@ -62,15 +63,16 @@ def main() -> int:
     if not output.is_absolute():
         output = root / output
 
-    files = source_files(root, output)
-    file_entries = [
-        {
-            "file": path.relative_to(root).as_posix(),
-            "sha256": sha256(path),
-            "bytes": path.stat().st_size,
-        }
-        for path in files
-    ]
+    file_entries = []
+    for path in source_files(root, output):
+        data = canonical_bytes(path)
+        file_entries.append(
+            {
+                "file": path.relative_to(root).as_posix(),
+                "sha256": hashlib.sha256(data).hexdigest(),
+                "bytes": len(data),
+            }
+        )
     tree_hasher = hashlib.sha256()
     for entry in file_entries:
         tree_hasher.update(entry["file"].encode("utf-8"))
@@ -83,18 +85,19 @@ def main() -> int:
     figures = {
         name: {
             "file": f"results/charts/{name}",
-            "sha256": sha256(root / "results" / "charts" / name),
+            "sha256": canonical_sha256(root / "results" / "charts" / name),
             "sources": [
-                {"file": source, "sha256": sha256(root / source)} for source in sources
+                {"file": source, "sha256": canonical_sha256(root / source)} for source in sources
             ],
         }
         for name, sources in FIGURE_SOURCES.items()
     }
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
+        "hash_line_endings": "LF",
         "project": "Caminho Euleriano x Caminho Hamiltoniano",
         "base_commit": git(root, "rev-parse", "HEAD"),
-        "tracked_worktree_dirty": bool(git(root, "status", "--porcelain")),
+        "tracked_worktree_dirty": bool(git(root, "status", "--porcelain", "--untracked-files=no")),
         "source_tree_sha256": tree_hasher.hexdigest(),
         "commands": {
             "quick_validation": "powershell -ExecutionPolicy Bypass -File .\\tools\\run-all.ps1 -Quick",
@@ -103,7 +106,7 @@ def main() -> int:
         "environment": environment,
         "datasets": {
             "manifest": "datasets/experimental-manifest.json",
-            "manifest_sha256": sha256(root / "datasets" / "experimental-manifest.json"),
+            "manifest_sha256": canonical_sha256(root / "datasets" / "experimental-manifest.json"),
             "generator": datasets["generator"],
             "generator_sha256": datasets["generator_sha256"],
             "seed": datasets["generator_seed"],
@@ -111,10 +114,6 @@ def main() -> int:
         },
         "figures": figures,
         "files": file_entries,
-        "human_fields": {
-            "contributions_complete": "PENDING_USER_INPUT",
-            "note": "Preencher nomes e contribuições reais antes de exportar o PDF final.",
-        },
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(

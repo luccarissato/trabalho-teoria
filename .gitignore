@@ -2,6 +2,7 @@
 *.md
 
 !README.md
+!/relatorio.md
 
 # Artefatos locais de compilação e teste
 c/bin/

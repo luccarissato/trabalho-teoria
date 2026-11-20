@@ -11,10 +11,10 @@ A parte técnica das quatro etapas está implementada:
 - 29 datasets determinísticos congelados por SHA-256;
 - 20 repetições válidas de tempo por ponto final e timeout de 60 segundos;
 - pico de memória medido em 15 processos novos por modo e ponto;
-- tabelas estatísticas, oito gráficos SVG e manifestos de rastreabilidade;
+- tabelas estatísticas, dez gráficos SVG e manifestos de rastreabilidade;
 - reprodução rápida e integral por um único script.
 
-No piloto, `V=14` foi o maior caso bipartido difícil concluído pelas duas linguagens em até 60 segundos; `V=16` foi o primeiro ponto censurado. Antes da entrega, o grupo ainda deve preencher em `relatorio.md` os nomes e as contribuições reais, exportar o relatório como um único PDF e preparar a apresentação de até sete minutos.
+No piloto publicado, `V=14` foi o maior caso bipartido difícil concluído pelas duas linguagens em até 60 segundos, e `V=16` foi o primeiro ponto censurado. A entrega do relatório em PDF é separada do código-fonte.
 
 ## Pré-requisitos
 
@@ -49,7 +49,7 @@ Execute os comandos a partir da raiz do projeto.
 powershell -ExecutionPolicy Bypass -File .\tools\run-all.ps1 -Quick
 ```
 
-O modo `-Quick` compila C17 com avisos, executa os testes de corretude, regenera os 29 datasets em uma pasta temporária, faz amostras curtas de tempo e memória, regenera a análise a partir dos CSVs finais e compara os hashes das tabelas e dos oito gráficos. Duração típica: menos de dois minutos.
+O modo `-Quick` compila C17 com avisos, executa os testes de corretude, regenera os 29 datasets em uma pasta temporária, faz amostras curtas de tempo e memória e compara as tabelas e os dez gráficos regenerados com os resultados publicados. O modo funciona a partir de um clone do repositório e grava os resultados da validação em `tmp/`. Os manifestos usam SHA-256 com quebras de linha normalizadas para LF nos arquivos de texto. Em geral, o modo leva menos de dois minutos.
 
 ### Reprodução integral
 
@@ -57,7 +57,7 @@ O modo `-Quick` compila C17 com avisos, executa os testes de corretude, regenera
 powershell -ExecutionPolicy Bypass -File .\tools\run-all.ps1 -Full
 ```
 
-O modo `-Full` remove de forma controlada somente os datasets experimentais e resultados gerados, recompila, testa e refaz piloto, medições, análise, gráficos e manifestos. Ele não apaga código-fonte, documentação nem os datasets básicos da Etapa 1. Na máquina registrada em `results/manifest.json`, a campanha leva aproximadamente 15 minutos e inclui dois timeouts planejados de 60 segundos em `V=16`.
+O modo `-Full` recompila, testa e substitui os dados e resultados experimentais pela nova campanha, incluindo piloto, medições, análise, gráficos e manifestos. Na máquina registrada em `results/manifest.json`, a campanha levou aproximadamente 15 minutos, incluindo os timeouts de 60 segundos em `V=16` de C e Python. O limite de viabilidade depende da máquina.
 
 Para executar somente a campanha experimental, sem a limpeza e a auditoria final:
 
@@ -115,6 +115,8 @@ powershell -ExecutionPolicy Bypass -File .\tools\measure-memory.ps1 -Datasets da
 
 Os campos `status`, `timeout` e `valid` distinguem conclusão válida, falha e censura. Somente observações concluídas, válidas e não censuradas entram nos resumos; os dados censurados permanecem nos CSVs brutos.
 
+`results/charts/hamilton_viability.svg` mostra os tempos do piloto e os timeouts. `results/charts/hamilton_ratio.svg` divide o tempo médio dos bipartidos completos desbalanceados pelo modelo teórico `V × a! × b!`, com `a` e `b` representando os tamanhos das partes.
+
 ## Formato dos grafos
 
 ```text
@@ -143,13 +145,12 @@ tools/measure-memory.ps1        coleta de memória no Windows
 tools/analyze.py                estatísticas, tabelas e SVGs
 tools/run-experiments.ps1       campanha experimental completa
 tools/run-all.ps1               validação rápida ou reprodução integral
-tools/verify_project.py         auditoria de dados e documentos
+tools/verify_project.py         validação dos dados e artefatos experimentais
 datasets/                       grafos e manifesto de hashes
 results/raw/                    observações individuais
 results/summary/                tabelas consolidadas
-results/charts/                 oito gráficos SVG
+results/charts/                 dez gráficos SVG
 results/final-manifest.json     fontes, hashes e comandos finais
-relatorio.md                    relatório nos sete itens exigidos
 ```
 
 ## Solução de problemas

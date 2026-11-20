@@ -1,30 +1,32 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "hash_line_endings": "LF",
+  "pilot_timeout_seconds": 60,
   "exclusion_rule": "Tempo: status=completed, valid=true e timeout=false. Memória: status=completed, timeout=false e pico disponível. Nenhum outlier válido é removido.",
   "inputs": [
     {
       "file": "results/raw/paired_timing.csv",
-      "sha256": "e23c3b4338dda60827eb6e53d7335bd4eb40c98a4d51a1d2c63e8b62450aad6b"
+      "sha256": "eb6585224ba5c6704db7183e7519ff560b49b27bb89cb8727cd2fcc10114917f"
     },
     {
       "file": "results/raw/eulerian_scale_timing.csv",
-      "sha256": "156b3e27233faf957486467a9fd06f1e49083c53e1c66de7d41f73e807411622"
+      "sha256": "08ce28ad8e211bebcc845c7a75d1111aef19b7369864f0cbe304cb17af0cc5e2"
     },
     {
       "file": "results/raw/paired_memory.csv",
-      "sha256": "3df38663a9addd23bc81c25c93062fc27d46de38f1c459b722f94bccf513fbd5"
+      "sha256": "c68b8ec616c007154963bde75ae564e461b9a301df521a91b1d3267d0fad3762"
     },
     {
       "file": "results/raw/eulerian_scale_memory.csv",
-      "sha256": "ff6d9631749ae57d4e66be1710b71bfc7416544cca11f74acd63bbe3c60a8278"
+      "sha256": "1c9ad69ff96884c4b74ae7c201be861129bafa3d27fb398da1cdac13b4788cd3"
     },
     {
       "file": "results/raw/pilot_timing.csv",
-      "sha256": "9525ec5c8697c72cb37d78744593651c72af59fd4f841610f3705d6a73c858df"
+      "sha256": "27a397fbf6f1041d31f62fc78613f55f9912df55aa87e0f12deb143437998c33"
     },
     {
       "file": "datasets/experimental-manifest.json",
-      "sha256": "beb18cbc0891ae3549e4533c4150d55a8bf89a9866ee37a28488ddb0cfd46fef"
+      "sha256": "c34b5c7127101f76db3dd10193e9d80c01751c4025e06881208c06e3826f2fc8"
     }
   ],
   "outputs": [
@@ -37,12 +39,20 @@
       "sha256": "90ca8390991044381f388c47faf7403f0a4df0f3e0bc9ff04fe08b4b80488c97"
     },
     {
+      "file": "results/charts/hamilton_ratio.svg",
+      "sha256": "3e9176d4c68d26c73a0ec4b813878fff60ed2b5e6dc9e5c83c677349e8ad8ce2"
+    },
+    {
       "file": "results/charts/hamilton_states.svg",
       "sha256": "2511f24ad2c223c4f58be4e4106305c0c917d300bdc26134816b4a52a96a5fae"
     },
     {
       "file": "results/charts/hamilton_time.svg",
       "sha256": "07f6923189db6574ddd5a0bde29cd9fced2d232da52790e7ac6672a1bafd7224"
+    },
+    {
+      "file": "results/charts/hamilton_viability.svg",
+      "sha256": "c986d4d07611aa9475786f2c177632ea22e64afb1864ce72c7cc35ca881ab95f"
     },
     {
       "file": "results/charts/language_ratio.svg",
