@@ -4,11 +4,9 @@
 
 ### 1.1 Escopo e modelo de entrada
 
-O trabalho compara dois problemas sobre grafos simples e não direcionados. Os vértices são identificados pelos inteiros de `0` a `V-1` e as arestas são pares não ordenados. Os mesmos arquivos de grafo são consumidos pelas implementações em C17 e Python. Em C, as estruturas usam vetores alocados explicitamente; em Python, listas e tuplas representam os mesmos dados e preservam a mesma ordem determinística de vizinhos.
+O estudo compara caminhos eulerianos e hamiltonianos em grafos simples e não direcionados, com vértices de `0` a `V-1`. As implementações em C17 e Python usam as mesmas entradas e a mesma ordem de vizinhos. Os testes comparam as respostas das duas linguagens para cada problema.
 
-O formato textual adotado começa com `TC_GRAPH 1`, seguido por `V`, `E`, `SEED`, `FAMILY`, `CASE`, pelo marcador `EDGES` e por `E` pares de vértices. Laços, arestas repetidas, vértices fora do intervalo e divergência entre `E` e a quantidade lida são rejeitados. A saída é um objeto JSON com o problema, existência, caminho testemunha, resultado da autovalidação, contadores, metadados e um campo reservado para tempo.
-
-Como os problemas são diferentes, a equivalência de corretude é verificada entre as duas linguagens para cada problema. Não se espera que um grafo tenha necessariamente a mesma resposta para Euler e Hamilton.
+O formato `TC_GRAPH 1` registra `V`, `E`, semente, família e caso, seguidos pelas arestas após `EDGES`. O leitor rejeita laços, duplicatas, vértices fora do intervalo e contagens incorretas. A saída JSON registra existência, caminho testemunha, validade, contadores, metadados e tempo.
 
 ### 1.2 Caminho euleriano e algoritmo de Hierholzer
 
@@ -77,11 +75,11 @@ O grafo ocupa `Theta(V + E)`. Fora da entrada, os vetores de vértices visitados
 
 ### 2.2 Backtracking hamiltoniano
 
-Cada chamada recursiva corresponde a um prefixo de uma permutação. Para comprimento `k`, há no máximo `P(V,k) = V!/(V-k)!` prefixos. A soma para `k=1,...,V` é `V!` vezes uma soma parcial da série de `e`, logo o número de chamadas é `O(V!)`. Cada chamada pode examinar até `V-1` vizinhos, e reinicializar as marcas para todos os vértices iniciais custa no máximo `O(V²)`. Assim, `O(V × V!)` é um limite superior para o pior caso geral.
+As chamadas recursivas visitam prefixos de permutações. Somando `V!/(V-k)!` para todos os comprimentos `k`, obtém-se `O(V!)` estados. Cada chamada examina até `V-1` vizinhos, e limpar as marcas para todos os vértices iniciais custa `O(V²)`. O pior caso geral tem limite superior `O(V × V!)`.
 
-Para justificar o crescimento no caso difícil, considere os bipartidos completos `K(a,b)` da campanha, com `V=a+b` e `b-a` igual a 2 ou 3. Como um caminho alterna entre as partes, o algoritmo esgota os prefixos sem encontrar solução. Só os prefixos de comprimento `2a+1` iniciados na parte maior já somam `a! × P(b,a+1) = a! × b! / (b-a-1)!`, que é `Omega(a! × b!)`. Para o limite superior, cada prefixo resulta da intercalação de uma sequência ordenada de cada parte, com no máximo duas escolhas de parte inicial. Somando as possibilidades de cada parte, o total é menor que `2e² × a! × b!`. Portanto, a busca visita `Theta(a! × b!)` estados nessa família. Como todo estado examina os `a` ou `b` vizinhos de seu último vértice e ambos os graus são `Theta(V)`, o tempo nessa família é `Theta(V × a! × b!)`. Isso também fornece um limite inferior fatorial para o pior caso geral. O contador `states_explored` mede as chamadas recursivas e permite comparar o trabalho de busca entre as duas linguagens.
+Nos bipartidos completos `K(a,b)` da campanha, `V=a+b` e `b-a` é 2 ou 3. A alternância entre as partes impede um caminho hamiltoniano, então a busca esgota os prefixos. Só os de comprimento `2a+1` que começam na parte maior somam `a! × b!/(b-a-1)!`, ou `Omega(a! × b!)`. Intercalando as sequências possíveis das duas partes, com até duas escolhas de início, obtém-se o teto de `2e² × a! × b!`. Cada um dos `Theta(a! × b!)` estados examina `Theta(V)` vizinhos, dando tempo `Theta(V × a! × b!)` nessa família. O contador `states_explored` registra os estados visitados.
 
-O grafo usa `Theta(V + E)`. O caminho, o vetor de visitados e a pilha recursiva possuem profundidade máxima `V`, totalizando `Theta(V)` de espaço auxiliar além da entrada. O espaço total é, portanto, `Theta(V + E)`, apesar do tempo exponencial/fatorial.
+O caminho, as marcas e a pilha recursiva usam `Theta(V)` de espaço auxiliar. Com o grafo, o espaço total é `Theta(V + E)`.
 
 ## 3. Melhor caso, pior caso e caso médio
 
@@ -121,21 +119,17 @@ As quatro combinações algoritmo-linguagem receberam exatamente os mesmos 18 ar
 
 ### 5.2 Protocolo executado
 
-Cada ponto final de tempo possui 20 repetições válidas. Antes de cada repetição medida, o mesmo processo executou três rodadas preliminares não contabilizadas para estabilização de caches. O CPython estava com o JIT experimental desativado. Operações rápidas foram executadas em lotes calibrados; o CSV preserva o tempo total bruto e o tempo inteiro por chamada.
+Cada ponto da campanha teve 20 repetições válidas, com três rodadas de aquecimento por repetição e JIT desativado. Chamadas rápidas foram agrupadas em lotes calibrados. O CSV bruto guarda os tempos do lote e por chamada, os contadores e os metadados da execução.
 
-O arquivo é carregado e validado antes do cronômetro. Em C, o Windows usa `QueryPerformanceCounter`; a alternativa Linux/WSL usa `clock_gettime(CLOCK_MONOTONIC)`. Python usa `time.perf_counter_ns()`. Somente as chamadas de Hierholzer ou do backtracking ficam entre início e fim; validação da resposta, serialização JSON e escrita do CSV ocorrem depois. Um processo externo aplica timeout de 60 segundos e registra separadamente `completed`, `failed`, `invalid` ou `timeout`. Timeout é dado censurado, não uma duração igual a 60 segundos.
+O cronômetro cobre apenas a execução do algoritmo, excluindo a leitura da entrada, a validação da resposta e a gravação da saída. C usa `QueryPerformanceCounter` no Windows e `clock_gettime(CLOCK_MONOTONIC)` em Linux/WSL. Python usa `time.perf_counter_ns()`. Execuções interrompidas pelo limite de 60 s ficam registradas como dados censurados.
 
-O CSV bruto de tempo preserva timestamp, commit, linguagem, problema, dataset, família, caso, semente, `V`, `E`, densidade, repetição, rodadas preliminares, lote, nanossegundos totais e por chamada, contadores do algoritmo, resposta, validade, status e timeout.
-
-Foram preservadas 1.440 linhas pareadas e 240 linhas da escala de Hierholzer, todas válidas e sem timeout. O piloto preserva oito conclusões e dois timeouts. Em ambas as linguagens, `V=14` concluiu - 1,669 s em C e 49,173 s em Python - e `V=16` foi censurado aos 60 s. Assim, `V=14` foi o maior tamanho difícil observado como viável no limite adotado; timeout não foi convertido em tempo igual a 60 s.
+A campanha registrou 1.440 observações pareadas e 240 de Hierholzer, todas válidas. No piloto, `V=14` foi o maior caso difícil concluído, em 1,669 s em C e 49,173 s em Python. Ambas as linguagens atingiram o timeout em `V=16`.
 
 ### 5.3 Memória e regra de exclusão
 
-A memória é medida separadamente do tempo porque criar e observar processos adiciona sobrecarga que não pertence ao algoritmo. No Windows, cada repetição inicia diretamente o executável C ou o executável real do Python e registra `PeakWorkingSet64` e `PeakPagedMemorySize64`. São usados 15 processos novos para o baseline, que apenas carrega e monta o grafo, e 15 para o algoritmo. O resumo apresenta média, mediana e desvio-padrão amostral, além do incremento aproximado `max(0, mediana_algoritmo - mediana_baseline)`.
+A memória foi medida separadamente no Windows com `PeakWorkingSet64` e `PeakPagedMemorySize64`. Cada ponto usou 15 processos novos para o baseline, que carrega o grafo, e 15 para o algoritmo. O resumo traz média, mediana, desvio-padrão amostral e o incremento aproximado `max(0, mediana_algoritmo - mediana_baseline)`. O pico inclui o grafo, as bibliotecas e, em Python, o interpretador.
 
-O working set inclui a entrada, bibliotecas e, no caso de Python, o interpretador. Por isso, o pico absoluto e o incremento são analisados em conjunto com `Theta(V+E)` de espaço total; o incremento não é tratado como medição exata do heap do algoritmo.
-
-Foram preservadas 720 linhas de memória pareada e 360 da escala de Hierholzer, sem falhas ou timeouts. Para tempo, a análise aceita somente `status=completed`, `valid=true` e `timeout=false`; para memória, exige processo concluído, não censurado e pico disponível. Nenhum outlier válido foi removido. Os CSVs brutos, resumos e hashes de análise estão em `results/raw/`, `results/summary/` e `results/analysis-manifest.json`.
+Foram registradas 720 medições pareadas e 360 de Hierholzer. A análise usa tempos válidos e picos disponíveis de execuções concluídas dentro do limite. Todos os outliers válidos foram mantidos. Os dados, resumos e hashes estão em `results/raw/`, `results/summary/` e `results/analysis-manifest.json`.
 
 ## 6. Gráficos e tabelas de comparação
 
@@ -206,31 +200,29 @@ O incremento é mais ruidoso e às vezes zero porque é a diferença entre media
 
 ## 7. Reflexão sobre P e NP
 
-O problema de decisão associado ao Caminho Euleriano pertence a **P**. Em um grafo não direcionado, basta verificar conectividade entre os vértices de grau não nulo e contar quantos graus são ímpares. As duas operações custam `O(V+E)`. Se a resposta for positiva, Hierholzer também constrói uma testemunha em `Theta(V+E)`. Portanto, tanto decidir a existência quanto produzir o caminho são tratáveis em tempo polinomial — neste caso, linear no tamanho da representação por listas de adjacência.
+O problema de decisão do **Caminho Euleriano pertence a P**. Em um grafo não direcionado, verifica-se se os vértices de grau não nulo estão conectados e se há zero ou dois vértices de grau ímpar. Essas condições decidem a existência de um caminho em `O(V+E)`. Quando existe, Hierholzer também o constrói nesse limite.
 
-O Caminho Hamiltoniano de decisão pertence a **NP**. Um certificado é uma sequência com `V` vértices. Um verificador confere em tempo polinomial se a sequência tem exatamente `V` elementos, se cada vértice aparece uma única vez e se todo par consecutivo forma uma aresta. Com uma tabela de adjacência ou marcação adequada, essa verificação custa `O(V+E)`; mesmo uma implementação ingênua permanece polinomial.
+O **Caminho Hamiltoniano pertence a NP**. Um certificado é uma sequência de `V` vértices. Em tempo polinomial, o verificador confere se cada vértice aparece uma única vez e se cada par consecutivo é ligado por uma aresta.
 
-Além disso, Caminho Hamiltoniano em grafos não direcionados é **NP-completo**. O pertencimento a NP foi demonstrado acima. Para a dificuldade, pode-se reduzir em tempo polinomial o problema do Ciclo Hamiltoniano, reconhecidamente NP-completo: escolhe-se um vértice `v`, substitui-se `v` por duas cópias com a mesma vizinhança e conecta-se uma nova folha a cada cópia. Qualquer caminho hamiltoniano precisa começar e terminar nessas folhas; removendo-as e reunindo as cópias, obtém-se um ciclo hamiltoniano no grafo original. No sentido inverso, cortar um ciclo em `v` produz o caminho entre as duas cópias. Logo, uma solução polinomial geral para Caminho Hamiltoniano implicaria uma solução polinomial para Ciclo Hamiltoniano.
+O problema é **NP-completo** por uma redução polinomial a partir de Ciclo Hamiltoniano. Substitui-se um vértice `v` por duas cópias com a mesma vizinhança e liga-se uma folha distinta a cada cópia. As folhas forçam as duas extremidades de qualquer caminho hamiltoniano no grafo transformado. Remover as folhas e reunir as cópias recupera um ciclo hamiltoniano no grafo original. No outro sentido, abrir o ciclo em `v`, separar suas extremidades entre as duas cópias e acrescentar as folhas produz um caminho hamiltoniano.
 
-A diferença estrutural explica o contraste observado. No problema euleriano, restrições locais de grau e conectividade caracterizam completamente a existência; depois de usar uma aresta, Hierholzer pode removê-la sem precisar reconsiderar escolhas globais. No problema hamiltoniano, exigir que cada vértice apareça exatamente uma vez cria uma ordem global: uma escolha local válida pode impedir todas as continuações, obrigando o algoritmo a desfazer decisões.
+O contraste decorre de como cada problema usa o grafo. Grau e conectividade caracterizam a existência do caminho euleriano. No problema hamiltoniano, visitar cada vértice uma única vez impõe uma ordem global. Uma escolha local pode bloquear todas as continuações, então o backtracking precisa desfazê-la e explorar alternativas. A programação dinâmica por subconjuntos resolve o problema em `O(V² × 2^V)`, um custo ainda exponencial. Uma heurística pode fornecer um caminho válido quando o encontra. Uma tentativa sem sucesso deixa a existência do caminho em aberto.
 
-O backtracking usado neste trabalho é exato e adequado para demonstrar essa explosão combinatória, mas não torna o problema tratável em geral. Programação dinâmica por subconjuntos reduz o limite para aproximadamente `O(V^2 2^V)`, ainda exponencial; branch-and-bound, SAT, programação inteira e heurísticas podem ampliar os casos práticos sem eliminar o pior caso. Para a versão de decisão não existe uma “aproximação” que substitua a resposta exata: uma heurística pode encontrar e certificar um caminho, mas falhar em encontrá-lo não certifica inexistência. Aproximações fazem mais sentido em problemas de otimização relacionados, como variantes do Caixeiro Viajante sob hipóteses específicas.
-
-Os experimentos tornam a distinção concreta sem constituírem prova de complexidade. Hierholzer foi medido até `V=32.000`, coerente com crescimento linear, enquanto o caso hamiltoniano bipartido difícil concluiu em `V=14` e atingiu o timeout de 60 segundos em `V=16` nas duas linguagens. Trocar C por Python altera constantes e memória, mas não muda a classe de complexidade nem remove a barreira combinatória.
+Nas medições, Hierholzer chegou a `V=32.000`. No piloto da família bipartida desbalanceada, o backtracking concluiu em `V=14` e atingiu o limite de 60 s em `V=16` nas duas linguagens. Os resultados ilustram a diferença de crescimento prevista pela análise.
 
 ## Ambiente de execução
 
 O manifesto experimental gerado com a campanha registra timestamp, commit, estado da árvore versionada, CPU, RAM, Windows, modo de energia, PowerShell, executáveis, versões e timers. O ambiente possui Intel Core i7-7700HQ, 17.033.236.480 bytes de RAM e Windows NT build 26200 em modo Equilibrado. C17 foi compilado com GCC 16.2.0 e flags `-std=c17 -O2 -Wall -Wextra -Wpedantic`; Python 3.14.10 usou CPython com JIT experimental desativado.
 
-## Participantes do Grupo
+## Participantes e contribuições
 
-
-
-| `Lucca Rissato` |
-| `Marco Aurelio` |
-| `Luiz Gonzaga` |
-| `Bernardo Guimarães` |
-| `Igor Gabriel` |
+| Integrante | Responsabilidade no projeto |
+| --- | --- |
+| Lucca Rissato | **Item 1.** Descrição dos problemas, pseudocódigos, implementações em C17 e Python e testes de corretude. |
+| Marco Aurelio | **Itens 2 e 3.** Justificativa dos limites O, Ω e Θ e análise do melhor caso, do pior caso e do caso médio. |
+| Luiz Gonzaga | **Itens 4 e 5.** Aplicações práticas, geração das entradas e execução das medições de tempo e memória, com registro do ambiente. |
+| Bernardo Guimarães | **Item 6.** Produção dos gráficos e tabelas e interpretação das comparações entre teoria e medições, algoritmos e linguagens. |
+| Igor Gabriel | **Item 7.** Classificação dos problemas em P e NP, redução a partir do Ciclo Hamiltoniano e discussão sobre tratabilidade. |
 
 ## Declaração de uso de IA
 
